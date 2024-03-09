@@ -26,7 +26,7 @@ export default function TabBarIcon(props: TabBarIconProps) {
     const containerBackgroundColor: string = backgroundColors[props.name]
     const containerBackgroundWidth: number = backgroundWidths[props.name]
 
-    const dynamicStyles = StyleSheet.create({
+    const dynamicStyle = StyleSheet.create({
         containerExpanded: {
             ...styles.container,
             backgroundColor: containerBackgroundColor,
@@ -39,7 +39,7 @@ export default function TabBarIcon(props: TabBarIconProps) {
     
 
     return(
-        <View style = { props.shouldExpand ? dynamicStyles.containerExpanded : 
+        <View style = { props.shouldExpand ? dynamicStyle.containerExpanded : 
                                              styles.container }>
             <FontAwesome 
              name = { props.iconName } 

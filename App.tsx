@@ -2,9 +2,9 @@ import * as React from 'react';
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import HomePage from './Components/HomePage';
-import Dashboard from './Components/Dashboard';
-import TabBarIcon from './Components/TabBarIcon';
+import HomePage from './Components/Screens/HomePage';
+import Dashboard from './Components/Screens/Dashboard';
+import TabBarIcon from './Components/Helpers/TabBarIcon';
 
 const Tab = createBottomTabNavigator();
 const homeRoute: string = "Home";

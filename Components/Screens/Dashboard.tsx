@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, ImageBackground, Image, DimensionValue } from 'react-native';
+import { StyleSheet, View, ImageBackground} from 'react-native';
 
 export default function Dashboard() {
   return (
     <ImageBackground 
-    source={require("../assets/Images/AppBackground.png")}
+    source={require("../../assets/Images/AppBackground.png")}
     resizeMode="cover"
     style={styles.background}>
       <StatusBar style="auto" />
@@ -15,7 +15,6 @@ export default function Dashboard() {
   );
 }
 
-const profilePicProportion: DimensionValue = 150
 
 const styles = StyleSheet.create({
   container: {

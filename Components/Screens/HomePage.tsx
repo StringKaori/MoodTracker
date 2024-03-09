@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue, Button } from 'react-native';
-import MoodifyButton from './MoodifyButton';
+import MoodifyButton from '../Helpers/MoodifyButton';
 
-const profileBackgroundPath = "../assets/Images/ProfileBackground.png";
-const profilePicturePath = "../assets/Images/ProfilePic.png";
+const profileBackgroundPath = "../../assets/Images/ProfileBackground.png";
+const profilePicturePath = "../../assets/Images/ProfilePic.png";
 
 const data = {
   "username" : "Schadenfreude",
@@ -13,7 +13,7 @@ const data = {
 export default function HomePage() {
   return (
     <ImageBackground 
-    source={require("../assets/Images/AppBackground.png")}
+    source={require("../../assets/Images/AppBackground.png")}
     resizeMode="cover"
     style={styles.background}>
 
