@@ -1,9 +1,10 @@
 import { StyleSheet, View, Modal, TouchableOpacity, Text} from 'react-native';
+import { MoodTypes } from './Enums/MoodTypes';
 
 interface MoodifyModalType {
-    shouldShowModal: boolean,
-    toggleModal: () => void
-}
+   shouldShowModal: boolean,
+   toggleModal: () => void
+} 
 
 export default function MoodifyModal(props: MoodifyModalType) {
 
@@ -21,6 +22,8 @@ export default function MoodifyModal(props: MoodifyModalType) {
                         <Text style={ styles.textStyle }>X</Text>
                     </TouchableOpacity>
                     <Text style={ styles.modalText }>Moodify your day!</Text>
+                    <Text style={ styles.modalText }>How are you feeling?</Text>
+
                 </View>
             </View>
         </Modal>    

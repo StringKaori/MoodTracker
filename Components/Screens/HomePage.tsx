@@ -5,7 +5,7 @@ import MoodifyButton from '../Helpers/MoodifyButton';
 const profileBackgroundPath = "../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../assets/Images/ProfilePic.png";
 
-const data = {
+const dataMock = {
   "username" : "Schadenfreude",
   "streakKind" : "Evil Streak"
 }
@@ -32,10 +32,10 @@ export default function HomePage() {
 
       <View style={styles.container}>
         <Text style={styles.userName}>
-          {data["username"]}
+          {dataMock["username"]}
         </Text>
         <Text style={styles.streakKind}>
-          {data["streakKind"]}
+          {dataMock["streakKind"]}
         </Text>
 
         <MoodifyButton/>
