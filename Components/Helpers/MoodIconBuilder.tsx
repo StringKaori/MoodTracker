@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, View} from 'react-native';
+import { DimensionValue, StyleSheet, View} from 'react-native';
 import { MoodTypes } from './Enums/MoodTypes'; 
 
 interface MoodIconBuilderType {
-    moodType: MoodTypes
+    mood: MoodTypes,
+    buttonSize: DimensionValue
 }
 
 export default function MoodIconBuilder(props: MoodIconBuilderType) {

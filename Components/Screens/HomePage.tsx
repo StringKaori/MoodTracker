@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue, Button } from 'react-native';
+import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue } from 'react-native';
 import MoodifyButton from '../Helpers/MoodifyButton';
 
 const profileBackgroundPath = "../../assets/Images/ProfileBackground.png";
