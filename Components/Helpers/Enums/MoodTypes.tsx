@@ -1,3 +1,49 @@
+export enum MoodTypes {
+  // red
+  Enraged,
+  Angry,
+  Confused,
+  Anxious,
+  Stressed,
+  Nervous,
+  Repulsed,
+  Worried,
+  Annoyed,
+
+  // yellow
+  Surprised,
+  Upbeat,
+  Excited,
+  Energized,
+  Inspired,
+  Proud,
+  Happy,
+  Hopeful,
+  Playful,
+
+  // blue
+  Disgusted,
+  Sad,
+  Shy,
+  Lonely,
+  Grumpy,
+  Bored,
+  Upset,
+  Hopeless,
+  Drained,
+
+  // green
+  Safe,
+  Loving,
+  Grateful,
+  Calm,
+  Restful,
+  Content,
+  Sleepy,
+  Peaceful,
+  Relaxed
+}
+
 export enum MoodTypesString {
   // red
   Enraged = "Enraged",
