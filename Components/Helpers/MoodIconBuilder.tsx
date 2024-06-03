@@ -1,21 +1,34 @@
 import React from 'react';
-import { DimensionValue, StyleSheet, View} from 'react-native';
-import { MoodTypes } from './Enums/MoodTypes'; 
+import { DimensionValue, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { MoodTypesString } from './Enums/MoodTypes';
+import { MoodImages } from './Consts/MoodImages';
 
 interface MoodIconBuilderType {
-    mood: MoodTypes,
+    moodName: MoodTypesString,
     buttonSize: DimensionValue
 }
 
 export default function MoodIconBuilder(props: MoodIconBuilderType) {
+    const proportion = {width: props.buttonSize, height: props.buttonSize}
     return (
-        <View>
-            
-        </View>
+        <TouchableOpacity style={[styles.container, proportion]}>
+            <Image 
+             source = { MoodImages[props.moodName] }
+             style = { styles.image }/>
+        </TouchableOpacity>
     );
 }
 
-
 const styles = StyleSheet.create({
-    
+    container: {
+        margin: 5,
+        borderWidth: 1, 
+        borderColor: 'black',
+        borderRadius: 1.75
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'contain'
+    }
 });

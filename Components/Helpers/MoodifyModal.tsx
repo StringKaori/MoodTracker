@@ -1,5 +1,6 @@
-import { StyleSheet, View, Modal, TouchableOpacity, Text} from 'react-native';
-import { MoodTypes } from './Enums/MoodTypes';
+import { StyleSheet, View, Modal, TouchableOpacity, Text, ScrollView} from 'react-native';
+import { MoodTypesString } from './Enums/MoodTypes';
+import MoodIconBuilder from './MoodIconBuilder';
 
 interface MoodifyModalType {
    shouldShowModal: boolean,
@@ -7,7 +8,7 @@ interface MoodifyModalType {
 } 
 
 export default function MoodifyModal(props: MoodifyModalType) {
-
+    const moodTypes = Object.values(MoodTypesString)
     return (
         <Modal
          animationType="slide"
@@ -23,20 +24,32 @@ export default function MoodifyModal(props: MoodifyModalType) {
                     </TouchableOpacity>
                     <Text style={ styles.modalText }>Moodify your day!</Text>
                     <Text style={ styles.modalText }>How are you feeling?</Text>
-
+                    <ScrollView 
+                     style = { styles.moodIconsView }
+                     showsVerticalScrollIndicator={false}>
+                        <View style={styles.wrapper}>
+                            {
+                                moodTypes.map(mood => (
+                                    <MoodIconBuilder
+                                    key={mood}
+                                    moodName = { mood } 
+                                    buttonSize = { 70 }/>
+                                ))
+                            }
+                        </View>
+                    </ScrollView>
                 </View>
             </View>
         </Modal>    
     );
 }
 
-
 const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 22,
+        marginTop: 22
     },
     modalView: {
         margin: 20,
@@ -55,7 +68,7 @@ const styles = StyleSheet.create({
         // Android
         elevation: 5,
         height: 500,
-        width: '90%'
+        width: "90%"
     },
     button: {
         position: 'absolute',
@@ -74,5 +87,13 @@ const styles = StyleSheet.create({
     },
     modalText: {
         textAlign: 'center',
+    },
+    moodIconsView : {
+        width: `100%`
+    },
+    wrapper: {
+        flexDirection: `row`,
+        flexWrap: `wrap`,
+        justifyContent: 'space-evenly'
     },
 });
