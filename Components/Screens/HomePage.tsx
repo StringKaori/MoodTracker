@@ -63,10 +63,12 @@ export default function HomePage() {
         <View style = {styles.recentMoodsContainer}>
           {
             dataMock["recentMoods"].map(data => (
-              <View style = { styles.recentMoodsItem }>
+              <View 
+                style = { styles.recentMoodsItem }
+                key = { data["id"] }>
                 <MoodIconBuilder 
-                moodName={MoodTypes[data["id"]] as MoodTypesString} 
-                buttonSize={130}/>
+                  moodName={MoodTypes[data["id"]] as MoodTypesString} 
+                  buttonSize={130}/>
 
                 <Text style={styles.recentMoodsItemText}>{data["dateString"]}</Text>
 
