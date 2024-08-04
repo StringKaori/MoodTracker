@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue } from 'react-native';
+import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue, ScrollView } from 'react-native';
 import { MoodTypes, MoodTypesString, MoodTypesColor } from '../../Helpers/Enums/MoodTypes';
 import MoodifyButton from '../../Helpers/MoodifyButton';
 import MoodIconBuilder from '../../Helpers/MoodIconBuilder';
@@ -39,7 +39,10 @@ export default function HomePage() {
      resizeMode="cover"
      style={styles.background}>
 
-      <View>
+    <ScrollView 
+     showsVerticalScrollIndicator={false}
+     style={styles.scrollview}>
+      <View style = {styles.absoluteContainer}>
         <StatusBar style="auto" />
         <Image 
          source={require(profileBackgroundPath)}
@@ -59,30 +62,31 @@ export default function HomePage() {
         <Text style={styles.streakKind}>
           {dataMock["streakKind"]}
         </Text>
+          <MoodifyButton/>
 
-        <MoodifyButton/>
+          <View style = {styles.recentMoodsContainer}>
+            {
+              dataMock["recentMoods"].map(data => (
+                <View 
+                  style = { styles.recentMoodsItem }
+                  key = { generateRandomString({ length: 16 }) }>
+                  <MoodIconBuilder 
+                    moodName={MoodTypes[data["id"]] as MoodTypesString} 
+                    iconBorderStyle={{borderWidth: 3}}
+                    buttonSize={130}/>
 
-        <View style = {styles.recentMoodsContainer}>
-          {
-            dataMock["recentMoods"].map(data => (
-              <View 
-                style = { styles.recentMoodsItem }
-                key = { generateRandomString({ length: 16 }) }>
-                <MoodIconBuilder 
-                  moodName={MoodTypes[data["id"]] as MoodTypesString} 
-                  iconBorderStyle={{borderWidth: 3}}
-                  buttonSize={130}/>
-
-                <Text style={styles.recentMoodsItemText}>{data["dateString"]}</Text>
-                
-                <Text style = { [styles.recentMoodsLabel, {backgroundColor: MoodTypesColor[MoodTypes[data["id"]] as keyof typeof MoodTypesColor]}] }>
-                  {MoodTypes[data["id"]]}
-                </Text>
-              </View>
-            ))
-          }
-        </View>
+                  <Text style={styles.recentMoodsItemText}>{data["dateString"]}</Text>
+                  
+                  <Text style = { [styles.recentMoodsLabel, {backgroundColor: MoodTypesColor[MoodTypes[data["id"]] as keyof typeof MoodTypesColor]}] }>
+                    {MoodTypes[data["id"]]}
+                  </Text>
+                </View>
+              ))
+            }
+          </View>
       </View>
+      
+    </ScrollView>
 
     </ImageBackground>
   );
@@ -91,9 +95,17 @@ export default function HomePage() {
 const profilePicProportion: DimensionValue = 150
 
 const styles = StyleSheet.create({
+  scrollview: {
+    marginBottom: 20
+  },
+
   container: {
+    flex: 1,
     alignItems: 'center',
-    justifyContent:'flex-start'
+  },
+
+  absoluteContainer: {
+    position: `relative`
   },
 
   background: {
@@ -125,7 +137,6 @@ const styles = StyleSheet.create({
   },
 
   recentMoodsContainer: {
-    alignContent: `center`,
     justifyContent: `space-evenly`,
     flexDirection: `row`,
     flexWrap: `wrap`
