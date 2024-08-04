@@ -4,6 +4,8 @@ import { MoodTypes, MoodTypesString } from '../../Helpers/Enums/MoodTypes';
 import MoodifyButton from '../../Helpers/MoodifyButton';
 import MoodIconBuilder from '../../Helpers/MoodIconBuilder';
 
+import { generateRandomString } from '../../Helpers/ConvenienceFunctions/GenerateRandomString';
+
 const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../../assets/Images/ProfilePic.png";
 
@@ -65,7 +67,7 @@ export default function HomePage() {
             dataMock["recentMoods"].map(data => (
               <View 
                 style = { styles.recentMoodsItem }
-                key = { data["id"] }>
+                key = { generateRandomString({ length: 16 }) }>
                 <MoodIconBuilder 
                   moodName={MoodTypes[data["id"]] as MoodTypesString} 
                   buttonSize={130}/>
