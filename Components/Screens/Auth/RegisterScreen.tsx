@@ -109,28 +109,32 @@ const handleRegisterAction = () => {
 
         <View>
           <Text style={styles.label}>Username</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Type your username here"
-            value={usernameInput}
-            onChangeText={setUsernameInput}
-          />
+            <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Type your username here"
+              value={usernameInput}
+              onChangeText={setUsernameInput}
+            />
+          </View>
           { isUsernameInputEmpty && <EmptyFieldError/> }
           { unnavailableUsername && <UnnavailableUsernameError/> }
           
           <Text style={styles.label}>E-mail</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Type your e-mail here"
-            value={emailInput}
-            onChangeText={setEmailInput}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Type your e-mail here"
+              value={emailInput}
+              onChangeText={setEmailInput}
+            />
+          </View>
           { isEmailInputEmpty && <EmptyFieldError/> }
           { !isEmailValid && <InvalidEmailError/> }
           { unnavailableEmail && <UnnavailableEmailError/> }
           
           <Text style={styles.label}>Password</Text>
-          <View style={styles.passwordInputContainer}>
+          <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
               placeholder="Type your password here"
@@ -143,18 +147,18 @@ const handleRegisterAction = () => {
                 handlePasswordVisibilityPress(seePasswordIcon,
                                               shouldHidePassword,
                                               setSeePasswordIcon,
-                                              setShouldHidePassword)}>
+                                              setShouldHidePassword)}
+             style = {styles.passwordEye}>
               <FontAwesome 
                 name = {seePasswordIcon}
-                size = {20}
-                style = {styles.passwordEye} /> 
+                size = {20} /> 
             </TouchableOpacity>
           </View>
           { isPasswordInputEmpty && <EmptyFieldError/> }
           { !passwordAreTheSame && <DifferentPasswordsError/> }
 
           <Text style={styles.label}>Password confirmation</Text>
-          <View style={styles.passwordInputContainer}>
+          <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
               placeholder="Type your password here"
@@ -167,11 +171,11 @@ const handleRegisterAction = () => {
                 handlePasswordVisibilityPress(seeConfirmPasswordIcon,
                                               shouldHideConfirmPassword,
                                               setSeeConfirmPasswordIcon,
-                                              setShouldHideConfirmPassword)}>
+                                              setShouldHideConfirmPassword)}
+             style = {styles.passwordEye}>
               <FontAwesome 
                 name = {seeConfirmPasswordIcon}
-                size = {20}
-                style = {styles.passwordEye} /> 
+                size = {20}/> 
             </TouchableOpacity>
           </View>
           { isConfirmPasswordInputEmpty && <EmptyFieldError/> }
@@ -209,16 +213,15 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: 380,
+    width: `98%`,
     backgroundColor: `white`,
     borderColor: 'black',
     borderWidth: 3,
     borderRadius: 6,
     paddingHorizontal: 8,
   },
-  passwordInputContainer: {
-    flexDirection: 'row',
-    position: 'relative'
+  inputContainer: {
+    flexDirection: 'row'
   },
   passwordEye: {
     position: 'absolute',

@@ -63,15 +63,17 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
 
         <View>
           <Text style={styles.label}>E-mail</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Type your e-mail here"
-            value={emailInput}
-            onChangeText={setEmailInput}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Type your e-mail here"
+              value={emailInput}
+              onChangeText={setEmailInput}
+            />
+          </View>
           
           <Text style={styles.label}>Password</Text>
-          <View style={styles.passwordInputContainer}>
+          <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
               placeholder="Type your password here"
@@ -80,11 +82,11 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
               secureTextEntry={shouldHidePassword}
             />
             <TouchableOpacity
-             onPress={handlePasswordVisibilityPress}>
+             onPress={handlePasswordVisibilityPress}
+             style = {styles.passwordEye}>
               <FontAwesome 
                 name = {seePasswordIcon}
-                size = {20}
-                style = {styles.passwordEye} /> 
+                size = {20} /> 
             </TouchableOpacity>
           </View>
           { wrongEmailOrPassword && <EmailOrPasswordIsWrongError/> }
@@ -127,12 +129,12 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: 380,
+    width: `98%`,
     backgroundColor: `white`,
     borderColor: 'black',
     borderWidth: 3,
     borderRadius: 6,
-    paddingHorizontal: 8,
+    paddingHorizontal: 8
   },
   linkContainer: {
     flexDirection: 'row',
@@ -159,14 +161,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: `center`,
   },
-  passwordInputContainer: {
+  inputContainer: {
     flexDirection: 'row',
-    position: 'relative'
   },
   passwordEye: {
     position: 'absolute',
-    right: 15,
+    right: 20,
     top: '50%',
-    transform: [{ translateY: -16 }],
+    transform: [{ translateY: -12 }],
   }
 });
