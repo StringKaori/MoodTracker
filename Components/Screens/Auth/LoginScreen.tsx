@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, TextInput } 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/navigation';
 import { EmailOrPasswordIsWrongError } from '../../Helpers/Errors/ErrorTexts';
+import { CommonActions } from '@react-navigation/native';
 // npm install axios
 // import axios from 'axios';
 
@@ -40,7 +41,12 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
         // setWrongEmailOrPassword(true)
 
     // caso sucesso
-    navigation.navigate('HomeNavigator')
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'HomeNavigator' }],
+      })
+    );
   }
 
   const handleRegisterAction = () => {
