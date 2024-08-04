@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ImageBackground} from 'react-native';
 
-export default function Dashboard() {
+export default function SettingsScreen() {
   return (
     <ImageBackground 
      source={require("../../../assets/Images/AppBackground.png")}
@@ -14,6 +14,7 @@ export default function Dashboard() {
     </ImageBackground>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

@@ -1,5 +1,5 @@
 import { StyleSheet, View, Modal, TouchableOpacity, Text, ScrollView} from 'react-native';
-import { MoodTypesString } from './Enums/MoodTypes';
+import { MoodTypesString, MoodTypesColor } from './Enums/MoodTypes';
 import MoodIconBuilder from './MoodIconBuilder';
 
 interface MoodifyModalType {
@@ -30,10 +30,16 @@ export default function MoodifyModal(props: MoodifyModalType) {
                         <View style={styles.wrapper}>
                             {
                                 moodTypes.map(mood => (
-                                    <MoodIconBuilder
-                                    key={mood}
-                                    moodName = { mood } 
-                                    buttonSize = { 70 }/>
+                                    <View key={mood}>
+                                        <MoodIconBuilder
+                                        moodName = { mood } 
+                                        buttonSize = { 70 }/>
+                                        <Text style = { 
+                                            [styles.moodsLabel,
+                                             {backgroundColor: MoodTypesColor[mood as keyof typeof MoodTypesColor]}] }>
+                                                { mood }
+                                        </Text>
+                                    </View>
                                 ))
                             }
                         </View>
@@ -96,4 +102,11 @@ const styles = StyleSheet.create({
         flexWrap: `wrap`,
         justifyContent: 'space-evenly'
     },
+    moodsLabel: {
+        textAlign: `center`,
+        borderRadius: 50,
+        borderColor: 'black',
+        borderWidth: 2,
+        fontWeight: `500`
+    }
 });

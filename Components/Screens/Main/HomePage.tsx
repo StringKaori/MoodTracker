@@ -9,25 +9,24 @@ import { generateRandomString } from '../../Helpers/ConvenienceFunctions/Generat
 const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../../assets/Images/ProfilePic.png";
 
-
 const dataMock = {
   "username" : "Schadenfreude",
   "streakKind" : "Evil Streak",
   "recentMoods" : [
     { 
-      "id": 1,
+      "id": 0,
       "dateString" : "Monday, July 18th"
     },
     { 
-      "id": 7,
+      "id": 9,
       "dateString" : "Monday, July 19th"
     },
     { 
-      "id": 9,
+      "id": 18,
       "dateString" : "Monday, July 20th"
     },
     { 
-      "id": 8,
+      "id": 27,
       "dateString" : "Monday, July 21th"
     },
   ]
@@ -71,11 +70,12 @@ export default function HomePage() {
                 key = { generateRandomString({ length: 16 }) }>
                 <MoodIconBuilder 
                   moodName={MoodTypes[data["id"]] as MoodTypesString} 
+                  iconBorderStyle={{borderWidth: 3}}
                   buttonSize={130}/>
 
                 <Text style={styles.recentMoodsItemText}>{data["dateString"]}</Text>
                 
-                <Text style = { [styles.labelPlaceHolder, {backgroundColor: MoodTypesColor[MoodTypes[data["id"]] as keyof typeof MoodTypesColor]}] }>
+                <Text style = { [styles.recentMoodsLabel, {backgroundColor: MoodTypesColor[MoodTypes[data["id"]] as keyof typeof MoodTypesColor]}] }>
                   {MoodTypes[data["id"]]}
                 </Text>
               </View>
@@ -138,8 +138,11 @@ const styles = StyleSheet.create({
     textAlign: `center`
   },
 
-  labelPlaceHolder: {
+  recentMoodsLabel: {
     textAlign: `center`,
-    borderRadius: 50
+    borderRadius: 50,
+    borderColor: 'black',
+    borderWidth: 2,
+    fontWeight: `500`
   }
 });

@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from '../HomePage';
 import Dashboard from '../Dashboard';
 import TabBarIcon from '../../../Helpers/TabBarIcon';
+import SettingsScreen from '../SettingsScreen';
 
 const Tab = createBottomTabNavigator();
 const homeRoute: string = "Home";
@@ -42,7 +43,7 @@ function HomeNavigationController() {
     >
       <Tab.Screen name={homeRoute} component={HomePage} />
       <Tab.Screen name={dashRoute} component={Dashboard} />
-      <Tab.Screen name={settingsRoute} component={Dashboard} />
+      <Tab.Screen name={settingsRoute} component={SettingsScreen} />
     </Tab.Navigator>
   );
 }
