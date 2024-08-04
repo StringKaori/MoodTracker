@@ -1,4 +1,4 @@
-import { NavigationContainer, useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import HomePage from '../HomePage';
@@ -8,7 +8,7 @@ import TabBarIcon from '../../../Helpers/TabBarIcon';
 const Tab = createBottomTabNavigator();
 const homeRoute: string = "Home";
 const dashRoute: string = "Dashboard";
-const slaRoute: string = "Sla";
+const settingsRoute: string = "Settings";
 
 function HomeNavigationController() {
   return (
@@ -26,9 +26,9 @@ function HomeNavigationController() {
           } else if (route.name === 'Dashboard') {
             iconName = 'line-chart';
             name = dashRoute
-          } else if (route.name === 'Sla') {
-            iconName = 'sticky-note';
-            name = slaRoute
+          } else if (route.name === 'Settings') {
+            iconName = 'gear';
+            name = settingsRoute
           }
 
           return <TabBarIcon 
@@ -42,7 +42,7 @@ function HomeNavigationController() {
     >
       <Tab.Screen name={homeRoute} component={HomePage} />
       <Tab.Screen name={dashRoute} component={Dashboard} />
-      <Tab.Screen name={slaRoute} component={Dashboard} />
+      <Tab.Screen name={settingsRoute} component={Dashboard} />
     </Tab.Navigator>
   );
 }

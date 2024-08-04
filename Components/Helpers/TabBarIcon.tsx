@@ -14,13 +14,13 @@ export default function TabBarIcon(props: TabBarIconProps) {
     const backgroundColors: {[key: string]: string} = {
         "Home": '#dffd19',
         "Dashboard": '#fdd27f',
-        "Sla": '#777777'
+        "Settings": '#777777'
     };
 
     const backgroundWidths: {[key: string]: number} = {
-        "Home": 90,
+        "Home": 110,
         "Dashboard": 130,
-        "Sla": 90
+        "Settings": 110
     };
 
     const containerBackgroundColor: string = backgroundColors[props.name]
