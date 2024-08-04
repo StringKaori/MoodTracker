@@ -16,6 +16,14 @@ export function DifferentPasswordsError() {
     )
 }
 
+export function InvalidEmailError() {
+    return(
+        <Text style={ styles.errorLabel }>
+            This is not a valid email!
+        </Text>
+    );
+}
+
 const styles = StyleSheet.create({
   errorLabel: {
     color: `red`

@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, TextInput } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { DifferentPasswordsError, EmptyFieldError } from '../../Helpers/Errors/ErrorTexts';
+import { DifferentPasswordsError, EmptyFieldError, InvalidEmailError } from '../../Helpers/Errors/ErrorTexts';
+import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/navigation';
 
-export default function RegisterScreen() {
+type AuthScreenProps = {
+    navigation: AuthScreenNavigationProp;
+};
+
+export default function RegisterScreen( { navigation }: AuthScreenProps ) {
   // inputs
   const [emailInput, setEmailInput] = useState<string>('');
   const [usernameInput, setUsernameInput] = useState<string>('');
@@ -21,7 +26,8 @@ export default function RegisterScreen() {
   const [isEmailInputEmpty, setIsEmailInputEmpty] = useState<boolean>(false)
   const [isPasswordInputEmpty, setIsPasswordInputEmpty] = useState<boolean>(false)
   const [isConfirmPasswordInputEmpty, setIsConfirmPasswordInputEmpty] = useState<boolean>(false)
-  const [passwordAreNotTheSame, setPasswordAreNotTheSame] = useState<boolean>(false)
+  const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+  const [passwordAreTheSame, setPasswordAreTheSame] = useState<boolean>(true)
 
   // Helper functions
   const handlePasswordVisibilityPress = (icon: String,
@@ -33,24 +39,40 @@ export default function RegisterScreen() {
     setShouldHide(!shouldHide)
   }
 
-  const handleRegisterAction = () => {
-    setIsUsernameInputEmpty(!usernameInput ? true : false)
-    setIsEmailInputEmpty(!emailInput ? true : false)
-    setIsPasswordInputEmpty(!passwordInput ? true : false)
-    setIsConfirmPasswordInputEmpty(!confirmPasswordInput ? true : false)
-    setPasswordAreNotTheSame(passwordInput != confirmPasswordInput ? true : false)
-    let canProceed: boolean = !isUsernameInputEmpty &&
-                              !isEmailInputEmpty &&
-                              !isPasswordInputEmpty &&
-                              !isConfirmPasswordInputEmpty &&
-                              passwordAreNotTheSame 
-    
-    if(canProceed) {
-        console.log("*** Username: ", usernameInput)
-        console.log("*** E-mail: ", emailInput)
-        console.log("*** Password: ", passwordInput)
+const handleRegisterAction = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const isUsernameInputEmpty = usernameInput === "";
+    const isEmailInputEmpty = emailInput === "";
+    const isPasswordInputEmpty = passwordInput === "";
+    const isConfirmPasswordInputEmpty = confirmPasswordInput === "";
+
+    setIsUsernameInputEmpty(isUsernameInputEmpty);
+    setIsEmailInputEmpty(isEmailInputEmpty);
+    setIsPasswordInputEmpty(isPasswordInputEmpty);
+    setIsConfirmPasswordInputEmpty(isConfirmPasswordInputEmpty);
+
+    const canProceed = !isUsernameInputEmpty &&
+                       !isEmailInputEmpty &&
+                       !isPasswordInputEmpty &&
+                       !isConfirmPasswordInputEmpty;
+
+    if (!canProceed) {
+        return;
     }
-  }
+
+    const emailIsValid = emailRegex.test(emailInput)
+    setIsEmailValid(emailIsValid)
+
+    const passwordAreTheSame = passwordInput === confirmPasswordInput;
+    setPasswordAreTheSame(passwordAreTheSame);
+
+    if (!passwordAreTheSame || !emailIsValid) {
+        return;
+    }
+
+    navigation.goBack()
+}
 
   return (
     <ImageBackground 
@@ -77,6 +99,7 @@ export default function RegisterScreen() {
             value={emailInput}
             onChangeText={setEmailInput}
           />
+          { !isEmailValid && <InvalidEmailError/> }
           { isEmailInputEmpty && <EmptyFieldError/> }
           
           <Text style={styles.label}>Password</Text>
@@ -101,7 +124,7 @@ export default function RegisterScreen() {
             </TouchableOpacity>
           </View>
           { isPasswordInputEmpty && <EmptyFieldError/> }
-          { passwordAreNotTheSame && <DifferentPasswordsError/> }
+          { !passwordAreTheSame && <DifferentPasswordsError/> }
 
           <Text style={styles.label}>Password confirmation</Text>
           <View style={styles.passwordInputContainer}>
@@ -125,7 +148,7 @@ export default function RegisterScreen() {
             </TouchableOpacity>
           </View>
           { isConfirmPasswordInputEmpty && <EmptyFieldError/> }
-          { passwordAreNotTheSame && <DifferentPasswordsError/> }
+          { !passwordAreTheSame && <DifferentPasswordsError/> }
 
         </View>
 
