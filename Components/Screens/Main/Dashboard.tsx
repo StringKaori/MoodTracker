@@ -4,7 +4,7 @@ import { StyleSheet, View, ImageBackground} from 'react-native';
 export default function Dashboard() {
   return (
     <ImageBackground 
-    source={require("../../assets/Images/AppBackground.png")}
+    source={require("../../../assets/Images/AppBackground.png")}
     resizeMode="cover"
     style={styles.background}>
       <StatusBar style="auto" />

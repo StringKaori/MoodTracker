@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue } from 'react-native';
-import { MoodTypes, MoodTypesString } from '../Helpers/Enums/MoodTypes';
-import MoodifyButton from '../Helpers/MoodifyButton';
-import MoodIconBuilder from '../Helpers/MoodIconBuilder';
+import { MoodTypes, MoodTypesString } from '../../Helpers/Enums/MoodTypes';
+import MoodifyButton from '../../Helpers/MoodifyButton';
+import MoodIconBuilder from '../../Helpers/MoodIconBuilder';
 
-const profileBackgroundPath = "../../assets/Images/ProfileBackground.png";
-const profilePicturePath = "../../assets/Images/ProfilePic.png";
+const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
+const profilePicturePath = "../../../assets/Images/ProfilePic.png";
 
 const dataMock = {
   "username" : "Schadenfreude",
@@ -33,7 +33,7 @@ const dataMock = {
 export default function HomePage() {
   return (
     <ImageBackground 
-     source={require("../../assets/Images/AppBackground.png")}
+     source={require("../../../assets/Images/AppBackground.png")}
      resizeMode="cover"
      style={styles.background}>
 
