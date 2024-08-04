@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, TextInput } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { DifferentPasswordsError, EmptyFieldError, InvalidEmailError } from '../../Helpers/Errors/ErrorTexts';
+import { DifferentPasswordsError, EmptyFieldError, InvalidEmailError, UnnavailableEmailError, UnnavailableUsernameError } from '../../Helpers/Errors/ErrorTexts';
 import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/navigation';
 
 type AuthScreenProps = {
@@ -28,6 +28,10 @@ export default function RegisterScreen( { navigation }: AuthScreenProps ) {
   const [isConfirmPasswordInputEmpty, setIsConfirmPasswordInputEmpty] = useState<boolean>(false)
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [passwordAreTheSame, setPasswordAreTheSame] = useState<boolean>(true)
+
+  // unnavailable helpers
+  const [unnavailableEmail, setUnnavailableEmail] = useState<boolean>(false)
+  const [unnavailableUsername, setUnnavailableUsername] = useState<boolean>(false)
 
   // Helper functions
   const handlePasswordVisibilityPress = (icon: String,
@@ -71,6 +75,27 @@ const handleRegisterAction = () => {
         return;
     }
 
+    const body = {
+      username: usernameInput,
+      email: emailInput,
+      password: passwordInput,
+    }
+
+    // chamada para o back
+    // setUnnavailableEmail(false)
+    // setUnnavailableUsername(false)
+
+    // retorno falha
+      // se sem internet ou conexão com o back
+        // mostrar mensagem de erro
+
+      // se email já utilizado
+        // setUnnavailableEmail(true)
+      
+      // se username já utilizado
+        // setUnnavailableUsername(true)
+
+    // retorno sucesso
     navigation.goBack()
 }
 
@@ -91,6 +116,7 @@ const handleRegisterAction = () => {
             onChangeText={setUsernameInput}
           />
           { isUsernameInputEmpty && <EmptyFieldError/> }
+          { unnavailableUsername && <UnnavailableUsernameError/> }
           
           <Text style={styles.label}>E-mail</Text>
           <TextInput
@@ -99,8 +125,9 @@ const handleRegisterAction = () => {
             value={emailInput}
             onChangeText={setEmailInput}
           />
-          { !isEmailValid && <InvalidEmailError/> }
           { isEmailInputEmpty && <EmptyFieldError/> }
+          { !isEmailValid && <InvalidEmailError/> }
+          { unnavailableEmail && <UnnavailableEmailError/> }
           
           <Text style={styles.label}>Password</Text>
           <View style={styles.passwordInputContainer}>

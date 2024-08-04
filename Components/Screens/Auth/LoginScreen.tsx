@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, TextInput } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/navigation';
+import { EmailOrPasswordIsWrongError } from '../../Helpers/Errors/ErrorTexts';
+// npm install axios
+// import axios from 'axios';
 
 type AuthScreenProps = {
   navigation: AuthScreenNavigationProp;
@@ -12,6 +15,7 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
   const [passwordInput, setPasswordInput] = useState<string>('');
   const [seePasswordIcon, setSeePasswordIcon] = useState<string>('eye-slash')
   const [shouldHidePassword, setShouldHidePassword] = useState<boolean>(true)
+  const [wrongEmailOrPassword, setWrongEmailOrPassword] = useState<boolean>(false)
 
   // Helper functions
   const handlePasswordVisibilityPress = () => {
@@ -21,6 +25,21 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
   }
 
   const handleLoginAction = () => {
+    const body = {
+      email: emailInput,
+      password: passwordInput,
+    }
+    // chamada para o back
+    // setWrongEmailOrPassword(false) 
+
+    // caso falha
+      // se sem internet ou back offline
+        // mostrar mensagem de erro
+
+      // se email ou senha inválidos
+        // setWrongEmailOrPassword(true)
+
+    // caso sucesso
     navigation.navigate('HomeNavigator')
   }
 
@@ -62,6 +81,7 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
                 style = {styles.passwordEye} /> 
             </TouchableOpacity>
           </View>
+          { wrongEmailOrPassword && <EmailOrPasswordIsWrongError/> }
         </View>
         
         <View style={styles.linkContainer}>
@@ -97,6 +117,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 3,
+    marginTop: 12,
   },
   input: {
     height: 40,
@@ -106,7 +127,6 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 6,
     paddingHorizontal: 8,
-    marginBottom: 12,
   },
   linkContainer: {
     flexDirection: 'row',
