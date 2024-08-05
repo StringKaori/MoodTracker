@@ -35,7 +35,6 @@ export default function MoodifyButton() {
     );
 }
 
-
 const styles = StyleSheet.create({
     button: {
         marginTop: 10,

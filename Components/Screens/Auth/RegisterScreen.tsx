@@ -82,6 +82,7 @@ const handleRegisterAction = () => {
     }
 
     // chamada para o back
+    // load screen
     // setUnnavailableEmail(false)
     // setUnnavailableUsername(false)
 

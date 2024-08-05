@@ -32,8 +32,9 @@ export default function MoodifyModal(props: MoodifyModalType) {
                                 moodTypes.map(mood => (
                                     <View key={mood}>
                                         <MoodIconBuilder
-                                        moodName = { mood } 
-                                        buttonSize = { 70 }/>
+                                         moodName = { mood } 
+                                         buttonSize = { 70 }
+                                         handlePress={() => {}}/>
                                         <Text style = { 
                                             [styles.moodsLabel,
                                              {backgroundColor: MoodTypesColor[mood as keyof typeof MoodTypesColor]}] }>

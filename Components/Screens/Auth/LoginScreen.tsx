@@ -31,6 +31,7 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
       password: passwordInput,
     }
     // chamada para o back
+    // load screen
     // setWrongEmailOrPassword(false) 
 
     // caso falha
@@ -60,6 +61,9 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
       style={styles.background}>
 
       <View style={styles.centeredView}>
+        <Text style={styles.title}>
+          Spectrum Mood Tracker
+        </Text>
 
         <View>
           <Text style={styles.label}>E-mail</Text>
@@ -113,6 +117,11 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: 30,
+    fontWeight: `600`,
+    marginBottom: 50
+  },
   background: {
     flex: 1,
     justifyContent: 'flex-start',

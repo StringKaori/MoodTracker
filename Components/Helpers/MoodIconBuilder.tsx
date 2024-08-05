@@ -6,14 +6,16 @@ import { MoodImages } from './Consts/MoodImages';
 interface MoodIconBuilderType {
     moodName: MoodTypesString,
     buttonSize: DimensionValue,
-    iconBorderStyle?: StyleProp<ImageStyle>
+    iconBorderStyle?: StyleProp<ImageStyle>,
+    handlePress: (props: any) => void
 }
 
 export default function MoodIconBuilder(props: MoodIconBuilderType) {
     const proportion = {width: props.buttonSize, height: props.buttonSize}
     return (
         <TouchableOpacity 
-         style={[styles.container, proportion]}>
+         style={[styles.container, proportion]}
+         onPress={() => props.handlePress(props.moodName)}>
             <Image 
              source = { MoodImages[props.moodName] }
              style = { [styles.image, props.iconBorderStyle] }/>

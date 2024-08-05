@@ -32,6 +32,12 @@ const dataMock = {
   ]
 }
 
+const handleRecentMoodPress = (props: {moodName: string}) => {
+  console.log('====================================');
+  console.log(props.moodName);
+  console.log('====================================');
+}
+
 export default function HomePage() {
   return (
     <ImageBackground 
@@ -73,7 +79,8 @@ export default function HomePage() {
                   <MoodIconBuilder 
                     moodName={MoodTypes[data["id"]] as MoodTypesString} 
                     iconBorderStyle={{borderWidth: 3}}
-                    buttonSize={130}/>
+                    buttonSize={130}
+                    handlePress={handleRecentMoodPress}/>
 
                   <Text style={styles.recentMoodsItemText}>{data["dateString"]}</Text>
                   
