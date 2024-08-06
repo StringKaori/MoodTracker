@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import LoginScreen from '../LoginScreen';
 import RegisterScreen from '../RegisterScreen';
-import HomeNavigationController from '../../Main/Controllers/HomeNavigationController';
+import HomeTabNavigationController from '../../Main/Controllers/HomeTabNavigationController';
 
 const Stack = createStackNavigator();
 
@@ -22,7 +22,7 @@ export default function AuthNavigationController() {
           options={{ headerShown: true }} />
         <Stack.Screen 
           name="HomeNavigator" 
-          component={HomeNavigationController} />
+          component={HomeTabNavigationController} />
       </Stack.Navigator>
     </NavigationContainer>
   );

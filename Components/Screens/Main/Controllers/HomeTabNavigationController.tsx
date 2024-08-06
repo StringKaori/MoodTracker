@@ -11,7 +11,7 @@ const homeRoute: string = "Home";
 const dashRoute: string = "Dashboard";
 const settingsRoute: string = "Settings";
 
-function HomeNavigationController() {
+function HomeTabNavigationController() {
   return (
     <Tab.Navigator 
       screenOptions={({ route }) => ({
@@ -48,4 +48,4 @@ function HomeNavigationController() {
   );
 }
 
-export default HomeNavigationController;
+export default HomeTabNavigationController;

@@ -9,13 +9,20 @@ import { generateRandomString } from '../../Helpers/ConvenienceFunctions/Generat
 const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../../assets/Images/ProfilePic.png";
 
+interface RecentMoodType {
+  id: number,
+  dateString: string
+  note?: string
+}
+
 const dataMock = {
   "username" : "Schadenfreude",
   "streakKind" : "Evil Streak",
   "recentMoods" : [
     { 
       "id": 0,
-      "dateString" : "Monday, July 18th"
+      "dateString" : "Monday, July 18th",
+      "note": "fiquei muito puto pq eu n comi méqui donaudis"
     },
     { 
       "id": 9,
@@ -27,13 +34,18 @@ const dataMock = {
     },
     { 
       "id": 27,
-      "dateString" : "Monday, July 21th"
+      "dateString" : "Monday, July 21th",
+      "note": "fiquei muito feliz pq eu comi méqui donaudis"
     },
   ]
 }
 
-const handleRecentMoodPress = (moodName: string) => {
-  
+const handleRecentMoodPress = (data: RecentMoodType) => {
+  console.log('====================================');
+  console.log(data.id);
+  console.log(data.dateString);
+  console.log(data.note)
+  console.log('====================================');
 }
 
 export default function HomePage() {
@@ -75,7 +87,7 @@ export default function HomePage() {
                   style = { styles.recentMoodsItem }
                   key = { generateRandomString({ length: 16 }) }>
                   <TouchableOpacity 
-                   onPress={() => handleRecentMoodPress}>
+                   onPress={() => handleRecentMoodPress(data)}>
                     <MoodIconBuilder 
                       moodName={MoodTypes[data["id"]] as MoodTypesString} 
                       iconBorderStyle={{borderWidth: 3}}
