@@ -1,15 +1,27 @@
 import { useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import HomePage from '../HomePage';
 import Dashboard from '../Dashboard';
 import TabBarIcon from '../../../Helpers/TabBarIcon';
 import SettingsScreen from '../SettingsScreen';
 
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const homeRoute: string = "Home";
 const dashRoute: string = "Dashboard";
 const settingsRoute: string = "Settings";
+
+function HomeNavigationController() {
+  return(
+    <Stack.Navigator 
+      initialRouteName="HomeTabNavigator"
+      screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="HomeTabNavigator" component={HomeTabNavigationController} />
+    </Stack.Navigator>
+  );
+}
 
 function HomeTabNavigationController() {
   return (
@@ -48,4 +60,4 @@ function HomeTabNavigationController() {
   );
 }
 
-export default HomeTabNavigationController;
+export default HomeNavigationController;
