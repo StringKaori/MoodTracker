@@ -1,5 +1,5 @@
-import React from 'react';
-import { DimensionValue, StyleSheet, TouchableOpacity, Image, StyleProp, ImageStyle } from 'react-native';
+import React, { useState } from 'react';
+import { DimensionValue, StyleSheet, View, Image, StyleProp, ImageStyle } from 'react-native';
 import { MoodTypesString } from './Enums/MoodTypes';
 import { MoodImages } from './Consts/MoodImages';
 
@@ -7,25 +7,25 @@ interface MoodIconBuilderType {
     moodName: MoodTypesString,
     buttonSize: DimensionValue,
     iconBorderStyle?: StyleProp<ImageStyle>,
-    handlePress: (props: any) => void
+    backgroundColor?: string,
 }
 
 export default function MoodIconBuilder(props: MoodIconBuilderType) {
     const proportion = {width: props.buttonSize, height: props.buttonSize}
+    const backgroundColorValue = props.backgroundColor ?? `transparent`
+
     return (
-        <TouchableOpacity 
-         style={[styles.container, proportion]}
-         onPress={() => props.handlePress(props.moodName)}>
+        <View style={[styles.container, proportion, {backgroundColor: backgroundColorValue}]}>
             <Image 
              source = { MoodImages[props.moodName] }
              style = { [styles.image, props.iconBorderStyle] }/>
-        </TouchableOpacity>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        margin: 5,
+        margin: 5
     },
     image: {
         borderWidth: 1,

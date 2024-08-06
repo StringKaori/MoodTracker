@@ -30,17 +30,16 @@ export default function MoodifyModal(props: MoodifyModalType) {
                         <View style={styles.wrapper}>
                             {
                                 moodTypes.map(mood => (
-                                    <View key={mood}>
+                                    <TouchableOpacity key={mood}>
                                         <MoodIconBuilder
                                          moodName = { mood } 
-                                         buttonSize = { 70 }
-                                         handlePress={() => {}}/>
+                                         buttonSize = { 70 }/>
                                         <Text style = { 
                                             [styles.moodsLabel,
                                              {backgroundColor: MoodTypesColor[mood as keyof typeof MoodTypesColor]}] }>
                                                 { mood }
                                         </Text>
-                                    </View>
+                                    </TouchableOpacity>
                                 ))
                             }
                         </View>

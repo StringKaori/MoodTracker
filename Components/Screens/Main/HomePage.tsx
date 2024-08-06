@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue, ScrollView, TouchableOpacity } from 'react-native';
 import { MoodTypes, MoodTypesString, MoodTypesColor } from '../../Helpers/Enums/MoodTypes';
 import MoodifyButton from '../../Helpers/MoodifyButton';
 import MoodIconBuilder from '../../Helpers/MoodIconBuilder';
@@ -32,10 +32,8 @@ const dataMock = {
   ]
 }
 
-const handleRecentMoodPress = (props: {moodName: string}) => {
-  console.log('====================================');
-  console.log(props.moodName);
-  console.log('====================================');
+const handleRecentMoodPress = (moodName: string) => {
+  
 }
 
 export default function HomePage() {
@@ -76,17 +74,20 @@ export default function HomePage() {
                 <View 
                   style = { styles.recentMoodsItem }
                   key = { generateRandomString({ length: 16 }) }>
-                  <MoodIconBuilder 
-                    moodName={MoodTypes[data["id"]] as MoodTypesString} 
-                    iconBorderStyle={{borderWidth: 3}}
-                    buttonSize={130}
-                    handlePress={handleRecentMoodPress}/>
-
-                  <Text style={styles.recentMoodsItemText}>{data["dateString"]}</Text>
+                  <TouchableOpacity 
+                   onPress={() => handleRecentMoodPress}>
+                    <MoodIconBuilder 
+                      moodName={MoodTypes[data["id"]] as MoodTypesString} 
+                      iconBorderStyle={{borderWidth: 3}}
+                      buttonSize={130}
+                      backgroundColor = {"#EEEEEE"}/>
                   
-                  <Text style = { [styles.recentMoodsLabel, {backgroundColor: MoodTypesColor[MoodTypes[data["id"]] as keyof typeof MoodTypesColor]}] }>
-                    {MoodTypes[data["id"]]}
-                  </Text>
+                    <Text style={styles.recentMoodsItemText}>{data["dateString"]}</Text>
+                    
+                    <Text style = { [styles.recentMoodsLabel, {backgroundColor: MoodTypesColor[MoodTypes[data["id"]] as keyof typeof MoodTypesColor]}] }>
+                      {MoodTypes[data["id"]]}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               ))
             }
