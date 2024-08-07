@@ -24,8 +24,13 @@ type RootStackParamList = {
 function HomeNavigationController() {
   return (
     <Stack.Navigator initialRouteName="HomeTabNavigator" screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="HomeTabNavigator" component={HomeTabNavigationController} />
-      <Stack.Screen name="RecentMoodDetailView" component={RecentMoodDetailView} />
+      <Stack.Screen 
+       name="HomeTabNavigator" 
+       component={HomeTabNavigationController}/>
+      <Stack.Screen 
+       name="RecentMoodDetailView" 
+       component={RecentMoodDetailView} 
+       options={{ headerShown: true }}/>
     </Stack.Navigator>
   );
 }

@@ -17,20 +17,20 @@ const dataMock = {
   "recentMoods" : [
     { 
       "id": 0,
-      "dateString" : "Monday, July 18th",
-      "note": "fiquei muito puto pq eu n comi méqui donaudis"
+      "dateString" : "Wed., Sep 18th",
+      "note": "fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis "
     },
     { 
       "id": 9,
-      "dateString" : "Monday, July 19th"
+      "dateString" : "Mon., Jul 19th"
     },
     { 
       "id": 18,
-      "dateString" : "Monday, July 20th"
+      "dateString" : "Mon., Jul 20th"
     },
     { 
       "id": 27,
-      "dateString" : "Monday, July 21th",
+      "dateString" : "Mon., Jul. 21th",
       "note": "fiquei muito feliz pq eu comi méqui donaudis"
     },
   ]
