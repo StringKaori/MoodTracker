@@ -49,7 +49,7 @@ export default function MoodifyScreen() {
 
         const body = {
             id: selectedMoodID,
-            date: new Date().toLocaleString(),
+            date: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
             note: noteInput
         }
         console.log('====================================');
