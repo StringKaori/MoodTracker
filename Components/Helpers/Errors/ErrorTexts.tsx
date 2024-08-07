@@ -49,9 +49,15 @@ export function UnnavailableUsernameError() {
     );
 }
 
-export function CharacterLimitReached() {
+export function CharacterLimitReached(props: {limit: number}) {
     return(
-        <SimpleLabel text={"You've reached the 360 character limit!"}/>
+        <SimpleLabel text={`You've reached the ${props.limit} character limit!`}/>
+    );
+}
+
+export function NoMoodSelectedError() {
+    return(
+        <SimpleLabel text={`You have to select a mood to proceed!`}/>
     );
 }
 

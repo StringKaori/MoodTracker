@@ -3,26 +3,58 @@ import { StyleSheet, View, Text, ImageBackground, TouchableOpacity, ScrollView, 
 import MoodIconBuilder from '../../Helpers/MoodIconBuilder';
 import { MoodTypes, MoodTypesColor, MoodTypesString } from '../../Helpers/Enums/MoodTypes';
 import { useState } from 'react';
-import { CharacterLimitReached } from '../../Helpers/Errors/ErrorTexts';
+import { CharacterLimitReached, NoMoodSelectedError } from '../../Helpers/Errors/ErrorTexts';
+import WarningModal from '../../Helpers/Errors/WarningModal';
 
 export default function MoodifyScreen() {
+    const noteCharacterLimit: number = 360
+    const noteImportanceMessage: string = "We highly recommend writing a note to help you remember why you've felted like this, if you really don't want to, just press the continue button again." 
+
     const moodTypes = Object.values(MoodTypesString)
     const [noteInput, setNoteInput] = useState('');
-    const [shouldShowError, setShouldShowError] = useState(false);
+    const [shouldShowCharacterLimitError, setShouldShowCharacterLimitError] = useState(false);
     const [selectedMoodID, setSelectedMoodID] = useState<number>();
     const [selectedMood, setSelectedMood] = useState<MoodTypesString>();
 
+    const [shouldShowNoMoodSelectedError, setShouldShowNoMoodSelectedError] = useState(false);
+    const [shouldShowNoteImportanceModal, setShouldShowNoteImportanceModal] = useState(false);
+    const [showedNoteImportanceModalAtLeastOnce, setShowedNoteImportanceModalAtLeastOnce] = useState(false);
+
     const handleNoteInputChange = (text: string) => {
-        const isTextInvalid = text.length > 360
-        setShouldShowError(isTextInvalid)
+        const isTextInvalid = text.length > noteCharacterLimit
+        setShouldShowCharacterLimitError(isTextInvalid)
         if(isTextInvalid) { return }
 
         setNoteInput(text)
     }
 
     const handleSelectedMood = (mood: MoodTypesString) => {
+        setShouldShowNoMoodSelectedError(false)
         setSelectedMoodID(MoodTypes[mood as keyof typeof MoodTypes])
         setSelectedMood(mood)
+    }
+
+    const handleContinueAction = () => {
+
+        if(!selectedMood) { 
+            setShouldShowNoMoodSelectedError(true) 
+            return
+        }
+
+        if(!noteInput && !showedNoteImportanceModalAtLeastOnce) {
+            setShouldShowNoteImportanceModal(true)
+            setShowedNoteImportanceModalAtLeastOnce(true)
+            return
+        }
+
+        const body = {
+            id: selectedMoodID,
+            date: new Date().toLocaleString(),
+            note: noteInput
+        }
+        console.log('====================================');
+        console.log(body);
+        console.log('====================================');
     }
 
     return (
@@ -34,6 +66,8 @@ export default function MoodifyScreen() {
 
             <View style={ styles.container }>
                 <Text style={ styles.title }>How are you feeling today?</Text>
+                
+               { shouldShowNoMoodSelectedError && <NoMoodSelectedError/> }
                 <ScrollView 
                  style = { styles.moodIconsView }
                  contentContainerStyle={styles.scrollViewContent}
@@ -57,7 +91,7 @@ export default function MoodifyScreen() {
                         }
                     </View>
                 </ScrollView>
-                
+
                 {
                     selectedMood &&
                     <View style={styles.selectedMoodContainer}>
@@ -82,10 +116,16 @@ export default function MoodifyScreen() {
                  onChangeText={handleNoteInputChange}
                  value={noteInput}
                  placeholder="Type something..." />
-                 { shouldShowError && <CharacterLimitReached/> }
-                 <TouchableOpacity style={styles.continueButton}>
+                 { shouldShowCharacterLimitError && <CharacterLimitReached limit={noteCharacterLimit}/> }
+                 <TouchableOpacity 
+                  style={styles.continueButton}
+                  onPress={handleContinueAction}>
                     <Text style={styles.continueText}>Continue</Text>
                  </TouchableOpacity>
+                 <WarningModal 
+                  visible = {shouldShowNoteImportanceModal} 
+                  onClose={() => setShouldShowNoteImportanceModal(false)}
+                  message={ noteImportanceMessage } />
             </View>
         </ImageBackground>
     );
