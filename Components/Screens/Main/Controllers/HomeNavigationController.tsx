@@ -30,7 +30,7 @@ function HomeNavigationController() {
       <Stack.Screen 
        name="RecentMoodDetailView" 
        component={RecentMoodDetailView} 
-       options={{ headerShown: true }}/>
+       options={{ headerShown: true, title: `Recent Mood Details` }}/>
     </Stack.Navigator>
   );
 }
