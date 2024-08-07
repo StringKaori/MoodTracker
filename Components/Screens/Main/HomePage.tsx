@@ -3,17 +3,13 @@ import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue, ScrollV
 import { MoodTypes, MoodTypesString, MoodTypesColor } from '../../Helpers/Enums/MoodTypes';
 import MoodifyButton from '../../Helpers/MoodifyButton';
 import MoodIconBuilder from '../../Helpers/MoodIconBuilder';
+import RecentMoodType from '../../Helpers/Interfaces/RecentMoodType';
 
 import { generateRandomString } from '../../Helpers/ConvenienceFunctions/GenerateRandomString';
+import { HomePageNavigationProp } from '../../Helpers/Interfaces/RootStackParamList';
 
 const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../../assets/Images/ProfilePic.png";
-
-interface RecentMoodType {
-  id: number,
-  dateString: string
-  note?: string
-}
 
 const dataMock = {
   "username" : "Schadenfreude",
@@ -40,15 +36,18 @@ const dataMock = {
   ]
 }
 
-const handleRecentMoodPress = (data: RecentMoodType) => {
-  console.log('====================================');
-  console.log(data.id);
-  console.log(data.dateString);
-  console.log(data.note)
-  console.log('====================================');
-}
+type HomeProps = {
+  navigation: HomePageNavigationProp;
+};
 
-export default function HomePage() {
+export default function HomePage({ navigation }: HomeProps) {
+
+  const handleRecentMoodPress = (data: RecentMoodType) => {
+    navigation.navigate('RecentMoodDetailView', {
+      moodData: data
+    });
+  }
+
   return (
     <ImageBackground 
      source={require("../../../assets/Images/AppBackground.png")}
