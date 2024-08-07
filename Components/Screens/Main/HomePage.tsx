@@ -43,9 +43,7 @@ type HomeProps = {
 export default function HomePage({ navigation }: HomeProps) {
 
   const handleRecentMoodPress = (data: RecentMoodType) => {
-    navigation.navigate('RecentMoodDetailView', {
-      moodData: data
-    });
+    navigation.navigate('RecentMoodDetailView', { moodData: data });
   }
 
   return (
@@ -92,9 +90,9 @@ export default function HomePage({ navigation }: HomeProps) {
                       iconBorderStyle={{borderWidth: 3}}
                       buttonSize={130}
                       backgroundColor = {"#EEEEEE"}/>
-                  
+
                     <Text style={styles.recentMoodsItemText}>{data["dateString"]}</Text>
-                    
+
                     <Text style = { [styles.recentMoodsLabel, {backgroundColor: MoodTypesColor[MoodTypes[data["id"]] as keyof typeof MoodTypesColor]}] }>
                       {MoodTypes[data["id"]]}
                     </Text>
