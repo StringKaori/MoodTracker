@@ -117,6 +117,7 @@ export default function MoodifyScreen() {
                  value={noteInput}
                  placeholder="Type something..." />
                  { shouldShowCharacterLimitError && <CharacterLimitReached limit={noteCharacterLimit}/> }
+
                  <TouchableOpacity 
                   style={styles.continueButton}
                   onPress={handleContinueAction}>
