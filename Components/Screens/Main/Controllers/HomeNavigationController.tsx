@@ -7,30 +7,32 @@ import HomePage from '../HomePage';
 import Dashboard from '../Dashboard';
 import TabBarIcon from '../../../Helpers/TabBarIcon';
 import SettingsScreen from '../SettingsScreen';
-import RecentMoodType from '../../../Helpers/Interfaces/RecentMoodType';
+import { MainStackParamList } from '../../../Helpers/Interfaces/RootStackParamList';
+import MoodifyScreen from '../MoodifyScreen';
 
-const Stack = createStackNavigator<RootStackParamList>();
+
+const Stack = createStackNavigator<MainStackParamList>();
 const Tab = createBottomTabNavigator();
 
 const homeRoute: string = "Home";
 const dashRoute: string = "Dashboard";
 const settingsRoute: string = "Settings";
 
-type RootStackParamList = {
-  HomeTabNavigator: undefined;
-  RecentMoodDetailView: { moodData: RecentMoodType };
-};
-
 function HomeNavigationController() {
   return (
-    <Stack.Navigator initialRouteName="HomeTabNavigator" screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="HomeTabNavigator">
       <Stack.Screen 
        name="HomeTabNavigator" 
-       component={HomeTabNavigationController}/>
+       component={HomeTabNavigationController}
+       options={{ headerShown: false}}/>
       <Stack.Screen 
        name="RecentMoodDetailView" 
        component={RecentMoodDetailView} 
-       options={{ headerShown: true, title: `Recent Mood Details` }}/>
+       options={{ title: `Recent Mood Details` }}/>
+      <Stack.Screen 
+       name="MoodifyScreen" 
+       component={MoodifyScreen} 
+       options={{ title: `Moodify Your Day!` }}/>
     </Stack.Navigator>
   );
 }

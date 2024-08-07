@@ -46,6 +46,10 @@ export default function HomePage({ navigation }: HomeProps) {
     navigation.navigate('RecentMoodDetailView', { moodData: data });
   }
 
+  const handleMoodifyPress = () => {
+    navigation.navigate('MoodifyScreen');
+  }
+
   return (
     <ImageBackground 
      source={require("../../../assets/Images/AppBackground.png")}
@@ -75,7 +79,7 @@ export default function HomePage({ navigation }: HomeProps) {
         <Text style={styles.streakKind}>
           {dataMock["streakKind"]}
         </Text>
-          <MoodifyButton/>
+          <MoodifyButton handlePress={handleMoodifyPress}/>
 
           <View style = {styles.recentMoodsContainer}>
             {

@@ -5,19 +5,23 @@ import MoodifyModal from './MoodifyModal';
 
 const registerMoodButtonTitle: string = "Have you recorded your mood today? Moodify now!"
 
-export default function MoodifyButton() {
+interface MoodifyButtonProps {
+    handlePress: () => void
+}
 
-    const [shouldShowModal, setShouldShowModal] = useState(false);
+export default function MoodifyButton(props: MoodifyButtonProps) {
 
-    const toggleModal = () => {
-      setShouldShowModal(!shouldShowModal)
-    }
+    // const [shouldShowModal, setShouldShowModal] = useState(false);
+
+    // const toggleModal = () => {
+    //   setShouldShowModal(!shouldShowModal)
+    // }
 
     return (
         <View>
             <TouchableOpacity 
                 style={styles.button}
-                onPress={() => setShouldShowModal(true)}>
+                onPress={props.handlePress}>
                 <Image 
                     source = {require("../../assets/Images/Emojis/MoodifyButtonEmoji.png")}
                     style = {styles.image}/>
@@ -27,9 +31,9 @@ export default function MoodifyButton() {
                 </Text>
             </TouchableOpacity>
 
-            { shouldShowModal &&
+            {/* { shouldShowModal &&
               <MoodifyModal shouldShowModal={shouldShowModal}
-                            toggleModal={toggleModal}/> }
+                            toggleModal={toggleModal}/> } */}
 
         </View>
     );

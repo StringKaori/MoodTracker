@@ -49,6 +49,12 @@ export function UnnavailableUsernameError() {
     );
 }
 
+export function CharacterLimitReached() {
+    return(
+        <SimpleLabel text={"You've reached the 360 character limit!"}/>
+    );
+}
+
 const styles = StyleSheet.create({
   errorLabel: {
     color: `red`
