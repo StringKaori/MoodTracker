@@ -95,7 +95,7 @@ export default function MoodifyScreen() {
                 {
                     selectedMood &&
                     <View style={styles.selectedMoodContainer}>
-                        <Text>Mood Selecionado:</Text>
+                        <Text>Selected Mood:</Text>
                         <View style={styles.selectedMoodCard}>
                             <MoodIconBuilder
                                 moodName = { selectedMood } 
