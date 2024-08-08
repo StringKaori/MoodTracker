@@ -52,9 +52,14 @@ export default function MoodifyScreen() {
             date: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
             note: noteInput
         }
+
+        // request
+        
         console.log('====================================');
         console.log(body);
         console.log('====================================');
+        // caso deu bom fala q deu bom e volta pra home
+        // caso deu ruim mostra erro
     }
 
     return (

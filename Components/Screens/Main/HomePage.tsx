@@ -14,7 +14,27 @@ const profilePicturePath = "../../../assets/Images/ProfilePic.png";
 const dataMock = {
   "username" : "Schadenfreude",
   "streakKind" : "Evil Streak",
+  "profileImage": "1354151514r5dfwa43rasd",
+  "backgroundImage": "1354151514r5dfwa43rasd",
   "recentMoods" : [
+    { 
+      "id": 0,
+      "dateString" : "Wed., Sep 18th",
+      "note": "fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis "
+    },
+    { 
+      "id": 9,
+      "dateString" : "Mon., Jul 19th"
+    },
+    { 
+      "id": 18,
+      "dateString" : "Mon., Jul 20th"
+    },
+    { 
+      "id": 27,
+      "dateString" : "Mon., Jul. 21th",
+      "note": "fiquei muito feliz pq eu comi méqui donaudis"
+    },
     { 
       "id": 0,
       "dateString" : "Wed., Sep 18th",
@@ -117,7 +137,6 @@ const profilePicProportion: DimensionValue = 150
 
 const styles = StyleSheet.create({
   scrollview: {
-    marginBottom: 20
   },
 
   container: {
@@ -158,6 +177,7 @@ const styles = StyleSheet.create({
   },
 
   recentMoodsContainer: {
+    marginTop: 8,
     justifyContent: `space-evenly`,
     flexDirection: `row`,
     flexWrap: `wrap`
@@ -167,10 +187,12 @@ const styles = StyleSheet.create({
   },
 
   recentMoodsItemText: {
-    textAlign: `center`
+    textAlign: `center`,
   },
 
   recentMoodsLabel: {
+    marginTop: 6,
+    marginBottom: 20,
     textAlign: `center`,
     borderRadius: 50,
     borderColor: 'black',

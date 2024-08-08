@@ -61,9 +61,7 @@ const handleRegisterAction = () => {
                        !isPasswordInputEmpty &&
                        !isConfirmPasswordInputEmpty;
 
-    if (!canProceed) {
-        return;
-    }
+    if (!canProceed) { return; }
 
     const emailIsValid = emailRegex.test(emailInput)
     setIsEmailValid(emailIsValid)
@@ -71,9 +69,7 @@ const handleRegisterAction = () => {
     const passwordAreTheSame = passwordInput === confirmPasswordInput;
     setPasswordAreTheSame(passwordAreTheSame);
 
-    if (!passwordAreTheSame || !emailIsValid) {
-        return;
-    }
+    if (!passwordAreTheSame || !emailIsValid) { return; }
 
     const body = {
       username: usernameInput,

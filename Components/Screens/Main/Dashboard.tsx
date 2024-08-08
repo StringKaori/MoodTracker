@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, ImageBackground} from 'react-native';
+import { StyleSheet, View, ImageBackground, Dimensions} from 'react-native';
 
 export default function Dashboard() {
   return (
@@ -8,8 +8,8 @@ export default function Dashboard() {
      resizeMode="cover"
      style={styles.background}>
       <StatusBar style="auto" />
-
       <View style={styles.container}>
+        
       </View>
     </ImageBackground>
   );
