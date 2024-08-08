@@ -56,6 +56,8 @@ const dataMock = {
   ]
 }
 
+global.recentMoods= dataMock["recentMoods"]
+
 type HomeProps = {
   navigation: HomePageNavigationProp;
 };
