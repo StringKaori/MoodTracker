@@ -10,7 +10,6 @@ import MoodListScreen from '../MoodListScreen';
 import { MainStackParamList } from '../../../Helpers/Interfaces/RootStackParamList';
 import MoodifyScreen from '../MoodifyScreen';
 
-
 const Stack = createStackNavigator<MainStackParamList>();
 const Tab = createBottomTabNavigator();
 
