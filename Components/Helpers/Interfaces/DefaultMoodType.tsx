@@ -1,7 +1,8 @@
 export default interface DefaultMoodType {
-    id: number,
-    date?: Date,
-    note?: string
+    // uuid: number, // uuid do registro
+    id: number, // id do enum pra mostrar o emoji
+    date?: Date, // data do registro do mood
+    note?: string // nota atrelada ao mood
 }
 
 export interface NavigationMoodType {

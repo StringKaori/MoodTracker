@@ -61,6 +61,12 @@ export function NoMoodSelectedError() {
     );
 }
 
+export function NoNotesTaken() {
+    return(
+        <SimpleLabel text={`"What a pity, you didn't take any notes this day :/"`}/>
+    );
+}
+
 const styles = StyleSheet.create({
   errorLabel: {
     color: `red`

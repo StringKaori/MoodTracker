@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackParamList } from './Interfaces/RootStackParamList';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 
 import MoodIconBuilder from './MoodIconBuilder';
 import { MoodTypes, MoodTypesString } from './Enums/MoodTypes';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { CharacterLimitReached, NoNotesTaken } from './Errors/ErrorTexts';
+import { Dimensions } from 'react-native';
+
+const screenWidth = Dimensions.get('window').width;
 
 type RecentMoodDetailViewRouteProp = RouteProp<MainStackParamList, 'RecentMoodDetailView'>;
 type RecentMoodDetailViewNavigationProp = StackNavigationProp<MainStackParamList, 'RecentMoodDetailView'>;
@@ -16,11 +20,16 @@ interface RecentMoodProps {
   navigation: RecentMoodDetailViewNavigationProp;
 }
 
-export default function RecentMoodDetailView({ route }: RecentMoodProps) {
+export default function RecentMoodDetailView({ route, navigation }: RecentMoodProps) {
+  const noteCharacterLimit: number = 360
+
   const { moodData } = route.params;
   const minNoteSize = 15
   const maxNoteSize = 25
   const [fontSizeValue, setFontSizeValue] = useState<number>(minNoteSize)
+  const [alteredNotes, setAlteredNotes] = useState(moodData.note ?? "")
+  const [shouldShowSaveChangesButton, setShouldShowSaveChangesButton] = useState(false)
+  const [shouldShowCharacterLimitError, setShouldShowCharacterLimitError] = useState(false);
 
   const handleZoomIn = () => {
     if(fontSizeValue < maxNoteSize) {
@@ -34,6 +43,32 @@ export default function RecentMoodDetailView({ route }: RecentMoodProps) {
       let size = fontSizeValue
       setFontSizeValue(size - 1)
     }
+  }
+
+  const handleNoteChange = (text: string) => {
+    const isTextInvalid = text.length > noteCharacterLimit
+    setShouldShowCharacterLimitError(isTextInvalid)
+    if(isTextInvalid) { return }
+
+    setAlteredNotes(text);
+    handleSaveChangesVisibility(text);
+  }
+  
+  const handleSaveChangesVisibility = (text: string) => {
+    const saveChangesVisibility = text !== moodData.note;
+    setShouldShowSaveChangesButton(saveChangesVisibility);
+  }
+
+  const didPressToSaveChanges = () => {
+    const body = {
+      note: alteredNotes
+    }
+    // request para o back
+    // caso sucesso
+    navigation.goBack()
+
+    // caso falha
+      // modal com o erro do back
   }
 
   return (
@@ -66,9 +101,24 @@ export default function RecentMoodDetailView({ route }: RecentMoodProps) {
                     size = { 30 } />
                 </TouchableOpacity>
               </View>
-              <Text style = {[styles.textContainer, styles.notes, {fontSize: fontSizeValue}]}>
-                { moodData.note ?? "What a pity, you didn't take any notes this day :/" } 
-              </Text>
+
+              <TextInput 
+               multiline={true}
+               numberOfLines={10}
+               value = { alteredNotes }
+               style = {[styles.textContainer, styles.notes, {fontSize: fontSizeValue}]}
+               onChangeText = {handleNoteChange} />
+              { (!moodData.note && !shouldShowSaveChangesButton) && <NoNotesTaken/> }
+              { shouldShowCharacterLimitError && <CharacterLimitReached limit={noteCharacterLimit}/> }
+
+              { shouldShowSaveChangesButton && 
+                <TouchableOpacity 
+                 style={styles.saveChangesButton}
+                 onPress={didPressToSaveChanges}>
+                  <Text style={styles.saveChangesText}>Save Changes</Text>
+                </TouchableOpacity>
+              }
+
             </View>
           </ScrollView>
       </View>
@@ -98,12 +148,33 @@ const styles = StyleSheet.create({
     borderRadius: 15
   },
   notes: {
+    textAlign: `justify`,
+    textAlignVertical: `top`,
+    padding: 5,
     borderRadius: 10,
-    padding: 5
+    width: screenWidth,
+    maxWidth: `95%`,
   },
   zoomContainer: {
     width: 100,
     flexDirection: `row`,
     justifyContent: `space-evenly`,
+  },
+  saveChangesButton: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#a3eafb',
+    height: 50,
+    width: 200,
+    borderRadius: 25,
+    borderColor: 'black',
+    borderWidth: 3
+  },
+  saveChangesText: {
+    flex: 1,
+    fontSize: 26,
+    textAlign: `center`
   }
 });
