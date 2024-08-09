@@ -47,9 +47,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#a3eafb',
         height: 86,
         width: 328,
-        borderRadius: 25,
+        borderRadius: 20,
         borderColor: 'black',
-        borderWidth: 3
+        borderWidth: 2,
+        borderBottomWidth: 7,
+        borderRightWidth: 7
     },
     image: {
         alignSelf:'flex-start',

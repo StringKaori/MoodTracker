@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue, ScrollView, TouchableOpacity } from 'react-native';
 import MoodifyButton from '../../Helpers/MoodifyButton';
-import DefaultMoodType from '../../Helpers/Interfaces/DefaultMoodType';
+import DefaultMoodType, { NavigationMoodType } from '../../Helpers/Interfaces/DefaultMoodType';
 import MoodCardBuilder from '../../Helpers/MoodCardBuilder';
 import { HomePageNavigationProp } from '../../Helpers/Interfaces/RootStackParamList';
 import { generateRandomString } from '../../Helpers/ConvenienceFunctions/GenerateRandomString';
+import { convertToDateString } from '../../Helpers/ConvenienceFunctions/ConvertToDateString';
 
 const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../../assets/Images/ProfilePic.png";
@@ -16,41 +17,41 @@ const dataMock = {
   "backgroundImage": "1354151514r5dfwa43rasd",
   "recentMoods" : [
     { 
-      "id": 0,
-      "dateString" : "Wed., Sep 18th",
-      "note": "fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis "
+      id: 0,
+      date: new Date(2024, 8, 18, 14, 30, 0),
+      note: "fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis "
     },
     { 
-      "id": 9,
-      "dateString" : "Mon., Jul 19th"
+      id: 9,
+      date: new Date(2024, 6, 19, 9, 0, 0),
     },
     { 
-      "id": 18,
-      "dateString" : "Mon., Jul 20th"
+      id: 18,
+      date: new Date(2024, 6, 20, 18, 45, 0),
     },
     { 
-      "id": 27,
-      "dateString" : "Mon., Jul. 21th",
-      "note": "fiquei muito feliz pq eu comi méqui donaudis"
+      id: 27,
+      date: new Date(2024, 6, 21, 23, 15, 0),
+      note: "fiquei muito feliz pq eu comi méqui donaudis"
     },
     { 
-      "id": 0,
-      "dateString" : "Wed., Sep 18th",
-      "note": "fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis "
+      id: 0,
+      date: new Date(2024, 8, 18, 12, 0, 0),
+      note: "fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis "
     },
     { 
-      "id": 9,
-      "dateString" : "Mon., Jul 19th"
+      id: 9,
+      date: new Date(2024, 6, 19, 8, 30, 0),
     },
     { 
-      "id": 18,
-      "dateString" : "Mon., Jul 20th"
+      id: 18,
+      date: new Date(2024, 6, 20, 15, 30, 0),
     },
     { 
-      "id": 27,
-      "dateString" : "Mon., Jul. 21th",
-      "note": "fiquei muito feliz pq eu comi méqui donaudis"
-    },
+      id: 27,
+      date: new Date(2024, 6, 21, 20, 0, 0),
+      note: "fiquei muito feliz pq eu comi méqui donaudis"
+    }
   ]
 }
 
@@ -63,7 +64,13 @@ type HomeProps = {
 export default function HomePage({ navigation }: HomeProps) {
 
   const handleRecentMoodPress = (data: DefaultMoodType) => {
-    navigation.navigate('RecentMoodDetailView', { moodData: data });
+    // se não for assim o ts reclama que é passado um valor não serializado via navigation
+    let navigationData: NavigationMoodType = {
+      id: data.id,
+      dateString: convertToDateString(data.date!),
+      note: data.note
+    }
+    navigation.navigate('RecentMoodDetailView', { moodData: navigationData });
   }
 
   const handleMoodifyPress = () => {
@@ -107,7 +114,10 @@ export default function HomePage({ navigation }: HomeProps) {
                   <MoodCardBuilder 
                    mood={mood}
                    buttonSize={130}
-                   iconBorderStyle={{borderWidth: 3}}
+                   iconBorderStyle={{borderWidth: 2, borderRadius: 20,
+                    borderBottomWidth: 7,
+                    borderRightWidth: 7}}
+                   middleTextString={convertToDateString(mood.date)}
                    iconBackgroundColor = {"#EEEEEE"}
                    key = { generateRandomString({ length: 16 }) }
                    handlePress = {handleRecentMoodPress}/>
@@ -172,4 +182,7 @@ const styles = StyleSheet.create({
     flexDirection: `row`,
     flexWrap: `wrap`
   },
+
+  filterIcon: {
+  }
 });

@@ -1,5 +1,11 @@
 export default interface DefaultMoodType {
     id: number,
-    dateString?: string
+    date?: Date,
+    note?: string
+}
+
+export interface NavigationMoodType {
+    id: number,
+    dateString: string,
     note?: string
 }

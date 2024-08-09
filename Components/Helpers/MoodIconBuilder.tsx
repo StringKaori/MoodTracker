@@ -15,10 +15,10 @@ export default function MoodIconBuilder(props: MoodIconBuilderType) {
     const backgroundColorValue = props.backgroundColor ?? `transparent`
 
     return (
-        <View style={[styles.container, proportion, {backgroundColor: backgroundColorValue}]}>
+        <View style={[styles.container, proportion]}>
             <Image 
              source = { MoodImages[props.moodName] }
-             style = { [styles.image, props.iconBorderStyle] }/>
+             style = { [styles.image, props.iconBorderStyle, , {backgroundColor: backgroundColorValue}] }/>
         </View>
     );
 }

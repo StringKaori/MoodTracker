@@ -21,8 +21,7 @@ interface ContentPropsType {
 }
 
 export default function MoodCardBuilder(props: BuilderPropsType) {
-    var middleText = props.middleTextString ??
-                     props.mood.dateString ?? ""
+    var middleText = props.middleTextString ?? ""
 
     const contentCard = <MoodCardContent 
                          buttonSize={props.buttonSize}
@@ -32,7 +31,7 @@ export default function MoodCardBuilder(props: BuilderPropsType) {
                          iconBackgroundColor = {props.iconBackgroundColor} />
     return(
         <View 
-         style = { styles.recentMoodsItem }>
+         style = { styles.moodsItem }>
             { props.handlePress ? (
                 <TouchableOpacity 
                  onPress={() => props.handlePress!(props.mood)}>
@@ -53,9 +52,9 @@ const MoodCardContent = (props: ContentPropsType) => {
              buttonSize={props.buttonSize}
              backgroundColor = {props.iconBackgroundColor}/>
 
-            <Text style={styles.recentMoodsItemText}>{props.middleTextValue}</Text>
+            <Text style={styles.moodsItemText}>{props.middleTextValue}</Text>
 
-            <Text style = { [styles.recentMoodsLabel, {backgroundColor: MoodTypesColor[MoodTypes[props.mood.id] as keyof typeof MoodTypesColor]}] }>
+            <Text style = { [styles.moodsLabel, {backgroundColor: MoodTypesColor[MoodTypes[props.mood.id] as keyof typeof MoodTypesColor]}] }>
                 {MoodTypes[props.mood.id]}
             </Text>
         </>
@@ -63,20 +62,20 @@ const MoodCardContent = (props: ContentPropsType) => {
 }
 
 const styles = StyleSheet.create({  
-      recentMoodsItem: {
+      moodsItem: {
       },
     
-      recentMoodsItemText: {
+      moodsItemText: {
         textAlign: `center`,
       },
     
-      recentMoodsLabel: {
+      moodsLabel: {
         marginTop: 6,
         marginBottom: 20,
         textAlign: `center`,
         borderRadius: 50,
         borderColor: 'black',
         borderWidth: 2,
-        fontWeight: `500`
+        fontWeight: `500`,
       }
 })

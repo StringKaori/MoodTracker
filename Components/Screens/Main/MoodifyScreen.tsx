@@ -49,7 +49,6 @@ export default function MoodifyScreen() {
 
         const body = {
             id: selectedMoodID,
-            date: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
             note: noteInput
         }
 
@@ -70,7 +69,7 @@ export default function MoodifyScreen() {
             <StatusBar style="auto" />
 
             <View style={ styles.container }>
-                <Text style={ styles.title }>How are you feeling today?</Text>
+               <Text style={ styles.title }>How are you feeling today?</Text>
                 
                { shouldShowNoMoodSelectedError && <NoMoodSelectedError/> }
                 <ScrollView 

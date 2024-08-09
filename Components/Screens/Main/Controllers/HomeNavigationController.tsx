@@ -6,7 +6,7 @@ import RecentMoodDetailView from '../../../Helpers/RecentMoodDetailView';
 import HomePage from '../HomePage';
 import Dashboard from '../Dashboard';
 import TabBarIcon from '../../../Helpers/TabBarIcon';
-import SettingsScreen from '../SettingsScreen';
+import MoodListScreen from '../MoodListScreen';
 import { MainStackParamList } from '../../../Helpers/Interfaces/RootStackParamList';
 import MoodifyScreen from '../MoodifyScreen';
 
@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator();
 
 const homeRoute: string = "Home";
 const dashRoute: string = "Dashboard";
-const settingsRoute: string = "Settings";
+const settingsRoute: string = "Mood List";
 
 function HomeNavigationController() {
   return (
@@ -53,8 +53,8 @@ function HomeTabNavigationController() {
           } else if (route.name === 'Dashboard') {
             iconName = 'line-chart';
             name = dashRoute;
-          } else if (route.name === 'Settings') {
-            iconName = 'gear';
+          } else if (route.name === 'Mood List') {
+            iconName = 'meh-o';
             name = settingsRoute;
           }
 
@@ -70,7 +70,7 @@ function HomeTabNavigationController() {
     >
       <Tab.Screen name={homeRoute} component={HomePage} />
       <Tab.Screen name={dashRoute} component={Dashboard} />
-      <Tab.Screen name={settingsRoute} component={SettingsScreen} />
+      <Tab.Screen name={settingsRoute} component={MoodListScreen} />
     </Tab.Navigator>
   );
 }
