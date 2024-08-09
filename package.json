@@ -14,9 +14,13 @@
     "@react-navigation/stack": "^6.4.1",
     "expo": "^51.0.24",
     "expo-status-bar": "~1.12.1",
+    "gifted-charts-core": "^0.1.29",
     "react": "18.2.0",
     "react-native": "0.74.3",
     "react-native-gesture-handler": "~2.16.1",
+    "react-native-gifted-charts": "^1.4.28",
+    "react-native-linear-gradient": "^2.8.3",
+    "react-native-svg": "^15.5.0",
     "react-native-vector-icons": "^10.0.3"
   },
   "devDependencies": {
