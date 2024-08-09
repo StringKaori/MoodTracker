@@ -1,12 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue, ScrollView, TouchableOpacity } from 'react-native';
-import { MoodTypes, MoodTypesString, MoodTypesColor } from '../../Helpers/Enums/MoodTypes';
 import MoodifyButton from '../../Helpers/MoodifyButton';
-import MoodIconBuilder from '../../Helpers/MoodIconBuilder';
-import RecentMoodType from '../../Helpers/Interfaces/RecentMoodType';
-
-import { generateRandomString } from '../../Helpers/ConvenienceFunctions/GenerateRandomString';
+import DefaultMoodType from '../../Helpers/Interfaces/DefaultMoodType';
+import MoodCardBuilder from '../../Helpers/MoodCardBuilder';
 import { HomePageNavigationProp } from '../../Helpers/Interfaces/RootStackParamList';
+import { generateRandomString } from '../../Helpers/ConvenienceFunctions/GenerateRandomString';
 
 const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../../assets/Images/ProfilePic.png";
@@ -64,7 +62,7 @@ type HomeProps = {
 
 export default function HomePage({ navigation }: HomeProps) {
 
-  const handleRecentMoodPress = (data: RecentMoodType) => {
+  const handleRecentMoodPress = (data: DefaultMoodType) => {
     navigation.navigate('RecentMoodDetailView', { moodData: data });
   }
 
@@ -105,28 +103,18 @@ export default function HomePage({ navigation }: HomeProps) {
 
           <View style = {styles.recentMoodsContainer}>
             {
-              dataMock["recentMoods"].map(data => (
-                <View 
-                  style = { styles.recentMoodsItem }
-                  key = { generateRandomString({ length: 16 }) }>
-                  <TouchableOpacity 
-                   onPress={() => handleRecentMoodPress(data)}>
-                    <MoodIconBuilder 
-                      moodName={MoodTypes[data["id"]] as MoodTypesString} 
-                      iconBorderStyle={{borderWidth: 3}}
-                      buttonSize={130}
-                      backgroundColor = {"#EEEEEE"}/>
-
-                    <Text style={styles.recentMoodsItemText}>{data["dateString"]}</Text>
-
-                    <Text style = { [styles.recentMoodsLabel, {backgroundColor: MoodTypesColor[MoodTypes[data["id"]] as keyof typeof MoodTypesColor]}] }>
-                      {MoodTypes[data["id"]]}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              ))
+                dataMock["recentMoods"].map(mood => (
+                  <MoodCardBuilder 
+                   mood={mood}
+                   buttonSize={130}
+                   iconBorderStyle={{borderWidth: 3}}
+                   iconBackgroundColor = {"#EEEEEE"}
+                   key = { generateRandomString({ length: 16 }) }
+                   handlePress = {handleRecentMoodPress}/>
+                ))
             }
           </View>
+          
       </View>
       
     </ScrollView>
@@ -184,21 +172,4 @@ const styles = StyleSheet.create({
     flexDirection: `row`,
     flexWrap: `wrap`
   },
-
-  recentMoodsItem: {
-  },
-
-  recentMoodsItemText: {
-    textAlign: `center`,
-  },
-
-  recentMoodsLabel: {
-    marginTop: 6,
-    marginBottom: 20,
-    textAlign: `center`,
-    borderRadius: 50,
-    borderColor: 'black',
-    borderWidth: 2,
-    fontWeight: `500`
-  }
 });

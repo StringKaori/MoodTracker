@@ -3,8 +3,9 @@ import { StyleSheet, View, ImageBackground, Dimensions, TouchableOpacity, Text, 
 import { MoodTypes, MoodTypesColor, MoodTypesString } from '../../Helpers/Enums/MoodTypes';
 import { BarChart, barDataItem, stackDataItem } from "react-native-gifted-charts";
 import { useState } from 'react';
-import MoodIconBuilder from '../../Helpers/MoodIconBuilder';
 import { generateRandomString } from '../../Helpers/ConvenienceFunctions/GenerateRandomString';
+import MoodCardBuilder from '../../Helpers/MoodCardBuilder';
+import DefaultMoodType from '../../Helpers/Interfaces/DefaultMoodType';
 
 const screenWidth = Dimensions.get('window').width
 
@@ -12,13 +13,15 @@ export default function Dashboard() {
   const barWidth = (screenWidth * 0.5) / 3.2
 
   const activeButton: ViewStyle = {
-    borderWidth: 1,
+    borderWidth: 2,
     borderBottomWidth: 0,
-    borderBottomColor: `transparent`
+    borderBottomColor: `transparent`,
+    backgroundColor: `#F7FAF8`
   }
 
   const inactiveButton: ViewStyle = {
-    borderWidth: 0
+    borderWidth: 0,
+    backgroundColor: `#C2C9C6`,
   }
 
   const [weeklyBorderWidth, setWeeklyBorderWidth] = useState<ViewStyle>(activeButton)
@@ -231,25 +234,18 @@ export default function Dashboard() {
                barBorderRadius={4}
                stackData={stackBarData}/>
 
-              <View style = { styles.recentMoodsContainer }>
+              <View style = { styles.moodsContainer }>
                 {
                   differentMoods.map(mood=>(
                     <View
-                     style = {styles.recentMoodItem}
+                     style = {styles.moodItem}
                      key = { generateRandomString({ length: 16 }) }>
-                      <MoodIconBuilder 
-                        moodName={MoodTypes[mood] as MoodTypesString} 
-                        iconBorderStyle={{borderWidth: 3}}
-                        buttonSize={50}
-                        backgroundColor = {"#EEEEEE"}/>
-
-                      <Text style={{textAlign: `center`}}>
-                        {moodCounts[MoodTypes[mood] as MoodTypesString]}
-                      </Text>
-
-                      <Text style = { [styles.recentMoodsLabel, {backgroundColor: MoodTypesColor[MoodTypes[mood] as keyof typeof MoodTypesColor]}] }>
-                        {MoodTypes[mood]}
-                      </Text>
+                      <MoodCardBuilder 
+                       mood={{"id": mood}}
+                       middleTextString={(moodCounts[MoodTypes[mood] as MoodTypesString].toString())}
+                       iconBorderStyle={{borderWidth: 3}}
+                       iconBackgroundColor = {"#EEEEEE"}
+                       buttonSize={50}/>
                     </View>
                   )) 
                 }
@@ -287,28 +283,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  recentMoodsContainer: {
+  moodsContainer: {
     marginTop: 8,
     flexDirection: `row`,
     justifyContent: `center`,
     flexWrap: `wrap`
   },
-
-  recentMoodsItemText: {
-    textAlign: `center`,
+  moodItem: {
+    marginHorizontal: 10,
   },
-
-  recentMoodItem: {
-    marginHorizontal: 10
-  },
-
-  recentMoodsLabel: {
-    marginTop: 6,
-    marginBottom: 20,
-    textAlign: `center`,
-    borderRadius: 50,
-    borderColor: 'black',
-    borderWidth: 2,
-    fontWeight: `500`
-  }
 });

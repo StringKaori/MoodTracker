@@ -1,5 +1,5 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import RecentMoodType from "./RecentMoodType";
+import RecentMoodType from "./DefaultMoodType";
 
 export type MainStackParamList = {
     HomeTabNavigator: undefined;
