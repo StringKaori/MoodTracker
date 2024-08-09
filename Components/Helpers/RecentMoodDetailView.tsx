@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from './Interfaces/RootStackParamList';
+import { MainStackParamList } from './Interfaces/RootStackParamList';
 import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
 
 import MoodIconBuilder from './MoodIconBuilder';
 import { MoodTypes, MoodTypesString } from './Enums/MoodTypes';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-type RecentMoodDetailViewRouteProp = RouteProp<RootStackParamList, 'RecentMoodDetailView'>;
-type RecentMoodDetailViewNavigationProp = StackNavigationProp<RootStackParamList, 'RecentMoodDetailView'>;
+type RecentMoodDetailViewRouteProp = RouteProp<MainStackParamList, 'RecentMoodDetailView'>;
+type RecentMoodDetailViewNavigationProp = StackNavigationProp<MainStackParamList, 'RecentMoodDetailView'>;
 
 interface RecentMoodProps {
   route: RecentMoodDetailViewRouteProp;
