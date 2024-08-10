@@ -22,7 +22,8 @@
     "react-native-gifted-charts": "^1.4.28",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-svg": "^15.5.0",
-    "react-native-vector-icons": "^10.0.3"
+    "react-native-vector-icons": "^10.0.3",
+    "expo-image-picker": "~15.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

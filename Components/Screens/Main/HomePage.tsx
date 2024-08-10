@@ -7,6 +7,9 @@ import { HomePageNavigationProp } from '../../Helpers/Interfaces/RootStackParamL
 import { generateRandomString } from '../../Helpers/ConvenienceFunctions/GenerateRandomString';
 import { convertToDateString } from '../../Helpers/ConvenienceFunctions/ConvertToDateString';
 import generateTestData from '../../Helpers/ConvenienceFunctions/GenerateTestData';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import { useState } from 'react';
 
 const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../../assets/Images/ProfilePic.png";
@@ -78,6 +81,35 @@ export default function HomePage({ navigation }: HomeProps) {
     navigation.navigate('MoodifyScreen');
   }
 
+  const [imageBytes, setImageBytes] = useState<string | null>(null);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled && result.assets[0].uri) {
+      let imageUriString = result.assets[0].uri;
+      await convertImageToBytes(imageUriString);
+    } 
+  };
+
+  const convertImageToBytes = async (imageUri: string) => {
+    try {
+      const base64 = await FileSystem.readAsStringAsync(imageUri, { encoding: 'base64' });
+      setImageBytes(base64);
+    } catch (error) {
+      console.error('Error converting image to bytes:', error);
+    }
+  };
+
+  const handleProfilePictureChange = async () => {
+    await pickImage();
+  };
+
   return (
     <ImageBackground 
      source={require("../../../assets/Images/AppBackground.png")}
@@ -93,9 +125,13 @@ export default function HomePage({ navigation }: HomeProps) {
          source={require(profileBackgroundPath)}
          resizeMode="cover"/>
 
-        <Image 
-         source={require(profilePicturePath)}
-         style={styles.profilePicture}/>
+        <TouchableOpacity 
+         style={styles.profilePicture}
+         onPress={handleProfilePictureChange}>
+          <Image 
+            source={imageBytes ? { uri: `data:image/png;base64,${imageBytes}` } : require(profilePicturePath)} 
+            style={styles.profileImage}/>
+         </TouchableOpacity>
       </View>
 
       <View style={styles.reset}/>
@@ -165,6 +201,16 @@ const styles = StyleSheet.create({
     width: profilePicProportion, // Adjust width and height as needed
     height: profilePicProportion,
   },
+  
+  profileImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 20,
+    borderColor: 'black',
+    borderWidth: 2,
+    borderBottomWidth: 7,
+    borderRightWidth: 7
+  },
 
   reset: {
     height: 40
@@ -188,5 +234,5 @@ const styles = StyleSheet.create({
   },
 
   filterIcon: {
-  }
+  },
 });
