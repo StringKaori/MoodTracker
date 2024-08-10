@@ -6,6 +6,7 @@ import MoodCardBuilder from '../../Helpers/MoodCardBuilder';
 import { HomePageNavigationProp } from '../../Helpers/Interfaces/RootStackParamList';
 import { generateRandomString } from '../../Helpers/ConvenienceFunctions/GenerateRandomString';
 import { convertToDateString } from '../../Helpers/ConvenienceFunctions/ConvertToDateString';
+import generateTestData from '../../Helpers/ConvenienceFunctions/GenerateTestData';
 
 const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../../assets/Images/ProfilePic.png";
@@ -126,7 +127,10 @@ export default function HomePage({ navigation }: HomeProps) {
           </View>
           
       </View>
-      
+      <TouchableOpacity
+       onPress={generateTestData}>
+        <Text>Gerar dados de teste</Text>
+      </TouchableOpacity>
     </ScrollView>
 
     </ImageBackground>
