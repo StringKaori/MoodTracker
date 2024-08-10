@@ -82,12 +82,6 @@ export default function MoodifyScreen({ navigation }: Props) {
             console.error(error.message)
             // throw error;
          });
-        
-        console.log('====================================');
-        console.log(body);
-        console.log('====================================');
-        // caso deu bom fala q deu bom e volta pra home
-        // caso deu ruim mostra erro
     }
 
     return (

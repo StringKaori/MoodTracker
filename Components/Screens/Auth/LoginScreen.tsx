@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, TextInput } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/navigation';
-import { EmailOrPasswordIsWrongError } from '../../Helpers/Errors/ErrorTexts';
 import { CommonActions } from '@react-navigation/native';
 import { LoginBodyType } from '../../Helpers/Interfaces/RequestTypes';
 import { updateToken, userLogin } from '../../Helpers/RequestBase';
+import WarningModal from '../../Helpers/Errors/WarningModal';
 
 type AuthScreenProps = {
   navigation: AuthScreenNavigationProp;
@@ -16,7 +16,8 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
   const [passwordInput, setPasswordInput] = useState<string>('');
   const [seePasswordIcon, setSeePasswordIcon] = useState<string>('eye-slash')
   const [shouldHidePassword, setShouldHidePassword] = useState<boolean>(true)
-  const [wrongEmailOrPassword, setWrongEmailOrPassword] = useState<boolean>(false)
+  const [shouldShowModal, setShouldShowModal] = useState<boolean>(false)
+  const [modalMessage, setModalMessage] = useState<string>("")
 
   // Helper functions
   const handlePasswordVisibilityPress = () => {
@@ -26,7 +27,6 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
   }
 
   const handleLoginAction = () => {
-    setWrongEmailOrPassword(false)
     const body: LoginBodyType = {
       email: emailInput,
       password: passwordInput,
@@ -45,9 +45,8 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
     })
 
     .catch((error) => {
-      if(error.response.data.message == "Usuário ou senha inválidos.") {
-        setWrongEmailOrPassword(true)
-      }
+      setShouldShowModal(true);
+      setModalMessage(error.response.data.message)
       // throw error;
     });
     
@@ -96,7 +95,6 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
                 size = {20} /> 
             </TouchableOpacity>
           </View>
-          { wrongEmailOrPassword && <EmailOrPasswordIsWrongError/> }
         </View>
         
         <View style={styles.linkContainer}>
@@ -114,6 +112,11 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
         </TouchableOpacity>
 
       </View>
+
+      <WarningModal
+       visible = {shouldShowModal} 
+       onClose={() => setShouldShowModal(false)}
+       message={ modalMessage } />
 
     </ImageBackground>
   );

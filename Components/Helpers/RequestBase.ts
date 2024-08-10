@@ -35,7 +35,6 @@ export const userLogin = async (userData: LoginBodyType) => {
 };
 
 export const newMoodEntry = async (userData: NewMoodType) => {
-    console.log('Request headers:', api.defaults.headers['x-access-token']);
     try {
         const response = await api.post('/mood/new', userData);
         return response.data;
