@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, TextInput } 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { DifferentPasswordsError, EmptyFieldError, InvalidEmailError, UnnavailableEmailError, UnnavailableUsernameError } from '../../Helpers/Errors/ErrorTexts';
 import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/navigation';
-import RegisterType from '../../Helpers/Interfaces/RegisterType';
+import { RegisterBodyType } from '../../Helpers/Interfaces/RequestTypes';
 import { registerUser } from '../../Helpers/RequestBase';
 import WarningModal from '../../Helpers/Errors/WarningModal';
 
@@ -73,7 +73,7 @@ const handleRegisterAction = () => {
 
     if (!passwordAreTheSame || !emailIsValid) { return; }
 
-    const body: RegisterType = {
+    const body: RegisterBodyType = {
       username: usernameInput,
       email: emailInput,
       password: passwordInput,

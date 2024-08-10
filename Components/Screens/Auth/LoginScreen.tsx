@@ -4,7 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/navigation';
 import { EmailOrPasswordIsWrongError } from '../../Helpers/Errors/ErrorTexts';
 import { CommonActions } from '@react-navigation/native';
-import LoginBodyType from '../../Helpers/Interfaces/LoginBodyType';
+import { LoginBodyType } from '../../Helpers/Interfaces/RequestTypes';
 import { userLogin } from '../../Helpers/RequestBase';
 
 type AuthScreenProps = {

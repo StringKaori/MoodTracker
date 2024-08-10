@@ -1,5 +1,4 @@
-import LoginBodyType from './Interfaces/LoginBodyType';
-import RegisterType from './Interfaces/RegisterType';
+import { LoginBodyType, RegisterBodyType, NewMoodType } from './Interfaces/RequestTypes';
 import axios from 'axios';
 
 const baseURLString = process.env.EXPO_PUBLIC_REACT_NATIVE_SERVER_URL
@@ -12,7 +11,7 @@ const api = axios.create({
     }
 });
 
-export const registerUser = async (userData: RegisterType) => {
+export const registerUser = async (userData: RegisterBodyType) => {
     try {
         const response = await api.post('/user/register', userData);
         return response.data;
