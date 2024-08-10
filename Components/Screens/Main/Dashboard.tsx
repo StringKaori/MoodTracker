@@ -8,6 +8,7 @@ import MoodCardBuilder from '../../Helpers/MoodCardBuilder';
 import { getPastSixMonthsMoods, getPastWeekMoods } from '../../Helpers/RequestBase';
 import { PastSixMonthsMoodType, PastMoodType } from '../../Helpers/Interfaces/RequestTypes';
 import LoadingScreen from '../../Helpers/LoadingScreen';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const screenWidth = Dimensions.get('window').width
 
@@ -177,22 +178,24 @@ export default function Dashboard() {
                barBorderRadius={4}
                stackData={stackBarData}/>
 
-              <View style = { styles.moodsContainer }>
-                {
-                  differentMoods.map(mood=>(
-                    <View
-                     style = {styles.moodItem}
-                     key = { generateRandomString({ length: 16 }) }>
-                      <MoodCardBuilder 
-                       mood={{"id": mood}}
-                       middleTextString={(moodCounts[MoodTypes[mood] as MoodTypesString].toString())}
-                       iconBorderStyle={{borderWidth: 3}}
-                       iconBackgroundColor = {"#EEEEEE"}
-                       buttonSize={50}/>
-                    </View>
-                  )) 
-                }
-              </View>
+              <ScrollView style = {styles.moodsScrollView}>
+                <View style = { styles.moodsContainer }>
+                  {
+                    differentMoods.map(mood=>(
+                      <View
+                      style = {styles.moodItem}
+                      key = { generateRandomString({ length: 16 }) }>
+                        <MoodCardBuilder 
+                        mood={{"id": mood}}
+                        middleTextString={(moodCounts[MoodTypes[mood] as MoodTypesString].toString())}
+                        iconBorderStyle={{borderWidth: 3}}
+                        iconBackgroundColor = {"#EEEEEE"}
+                        buttonSize={50}/>
+                      </View>
+                    )) 
+                  }
+                </View>
+             </ScrollView>
             </View>
           }
         </View>
@@ -235,4 +238,7 @@ const styles = StyleSheet.create({
   moodItem: {
     marginHorizontal: 10,
   },
+  moodsScrollView: {
+    height: 200,
+  }
 });

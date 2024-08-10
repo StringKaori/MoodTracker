@@ -1,4 +1,9 @@
-export function convertToDateString(date: Date): string {
+export function convertToDateString(date: string | Date): string {
+
+    if (typeof date === 'string') {
+        date = new Date(date);
+    }
+
     const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 

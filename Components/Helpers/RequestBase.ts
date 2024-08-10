@@ -63,3 +63,13 @@ export const getPastSixMonthsMoods = async () => {
         throw error;
     }
 };
+
+export const getAllMoods = async () => {
+    try {
+        const response = await api.get('/mood/all');
+        return response.data;
+    } catch (error) {
+        console.error('Error in the user auth:', error);
+        throw error;
+    }
+};
