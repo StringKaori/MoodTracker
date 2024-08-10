@@ -2,14 +2,17 @@ import { LoginBodyType, RegisterBodyType, NewMoodType } from './Interfaces/Reque
 import axios from 'axios';
 
 const baseURLString = process.env.EXPO_PUBLIC_REACT_NATIVE_SERVER_URL
-const token = null;
 
 const api = axios.create({
     baseURL: baseURLString,
     headers: {
-        'x-access-token': `Bearer ${token}`
+        'x-access-token': `Bearer ${null}`
     }
 });
+
+export const updateToken = () => {
+    api.defaults.headers['x-access-token'] = `Bearer ${global.token}`;
+};
 
 export const registerUser = async (userData: RegisterBodyType) => {
     try {
@@ -24,6 +27,17 @@ export const registerUser = async (userData: RegisterBodyType) => {
 export const userLogin = async (userData: LoginBodyType) => {
     try {
         const response = await api.post('/auth/user', userData);
+        return response.data;
+    } catch (error) {
+        console.error('Error in the user auth:', error);
+        throw error;
+    }
+};
+
+export const newMoodEntry = async (userData: NewMoodType) => {
+    console.log('Request headers:', api.defaults.headers['x-access-token']);
+    try {
+        const response = await api.post('/mood/new', userData);
         return response.data;
     } catch (error) {
         console.error('Error in the user auth:', error);

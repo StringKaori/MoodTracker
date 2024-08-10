@@ -5,7 +5,7 @@ import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/na
 import { EmailOrPasswordIsWrongError } from '../../Helpers/Errors/ErrorTexts';
 import { CommonActions } from '@react-navigation/native';
 import { LoginBodyType } from '../../Helpers/Interfaces/RequestTypes';
-import { userLogin } from '../../Helpers/RequestBase';
+import { updateToken, userLogin } from '../../Helpers/RequestBase';
 
 type AuthScreenProps = {
   navigation: AuthScreenNavigationProp;
@@ -35,6 +35,7 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
     userLogin(body)
     .then((data) => {
       global.token = data.signToken
+      updateToken()
       navigation.dispatch(
         CommonActions.reset({
           index: 0,

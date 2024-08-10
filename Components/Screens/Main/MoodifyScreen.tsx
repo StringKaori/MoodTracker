@@ -5,8 +5,15 @@ import { MoodTypes, MoodTypesColor, MoodTypesString } from '../../Helpers/Enums/
 import { useState } from 'react';
 import { CharacterLimitReached, NoMoodSelectedError } from '../../Helpers/Errors/ErrorTexts';
 import WarningModal from '../../Helpers/Errors/WarningModal';
+import { NewMoodType } from '../../Helpers/Interfaces/RequestTypes';
+import { newMoodEntry } from '../../Helpers/RequestBase';
+import { HomePageNavigationProp } from '../../Helpers/Interfaces/RootStackParamList';
 
-export default function MoodifyScreen() {
+type Props = {
+    navigation: HomePageNavigationProp;
+};
+
+export default function MoodifyScreen({ navigation }: Props) {
     const noteCharacterLimit: number = 360
     const noteImportanceMessage: string = "We highly recommend writing a note to help you remember why you've felted like this, if you really don't want to, just press the continue button again." 
 
@@ -19,6 +26,15 @@ export default function MoodifyScreen() {
     const [shouldShowNoMoodSelectedError, setShouldShowNoMoodSelectedError] = useState(false);
     const [shouldShowNoteImportanceModal, setShouldShowNoteImportanceModal] = useState(false);
     const [showedNoteImportanceModalAtLeastOnce, setShowedNoteImportanceModalAtLeastOnce] = useState(false);
+
+    const [shouldShowModal, setShouldShowModal] = useState<boolean>(false)
+    const [isSuccess, setIsSuccess] = useState<boolean>(false)
+    const [modalMessage, setModalMessage] = useState<string>("")
+
+    const handleModalClose = () => {
+        setShouldShowModal(false);
+        if(isSuccess) { navigation.goBack() }
+    }
 
     const handleNoteInputChange = (text: string) => {
         const isTextInvalid = text.length > noteCharacterLimit
@@ -47,12 +63,25 @@ export default function MoodifyScreen() {
             return
         }
 
-        const body = {
-            id: selectedMoodID,
+        const body: NewMoodType = {
+            id: selectedMoodID!,
             note: noteInput
         }
 
         // request
+        newMoodEntry(body)
+         .then((data) => {
+            setShouldShowModal(true);
+            setIsSuccess(true)
+            setModalMessage('Mood entry created successfuly!')
+         })
+
+         .catch((error) => {
+            setShouldShowModal(true);
+            setModalMessage(error.response.data.message)
+            console.error(error.message)
+            // throw error;
+         });
         
         console.log('====================================');
         console.log(body);
@@ -132,6 +161,12 @@ export default function MoodifyScreen() {
                   onClose={() => setShouldShowNoteImportanceModal(false)}
                   message={ noteImportanceMessage } />
             </View>
+
+            <WarningModal
+             visible = {shouldShowModal} 
+             onClose={handleModalClose}
+             message={ modalMessage } />
+
         </ImageBackground>
     );
 }
