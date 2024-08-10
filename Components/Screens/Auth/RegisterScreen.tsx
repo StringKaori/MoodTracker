@@ -5,6 +5,7 @@ import { DifferentPasswordsError, EmptyFieldError, InvalidEmailError, Unnavailab
 import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/navigation';
 import RegisterType from '../../Helpers/Interfaces/RegisterType';
 import { registerUser } from '../../Helpers/RequestBase';
+import WarningModal from '../../Helpers/Errors/WarningModal';
 
 type AuthScreenProps = {
     navigation: AuthScreenNavigationProp;
@@ -30,10 +31,9 @@ export default function RegisterScreen( { navigation }: AuthScreenProps ) {
   const [isConfirmPasswordInputEmpty, setIsConfirmPasswordInputEmpty] = useState<boolean>(false)
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
   const [passwordAreTheSame, setPasswordAreTheSame] = useState<boolean>(true)
-
-  // unnavailable helpers
-  const [unnavailableEmail, setUnnavailableEmail] = useState<boolean>(false)
-  const [unnavailableUsername, setUnnavailableUsername] = useState<boolean>(false)
+  const [shouldShowModal, setShouldShowModal] = useState<boolean>(false)
+  const [isSuccess, setIsSuccess] = useState<boolean>(false)
+  const [modalMessage, setModalMessage] = useState<string>("")
 
   // Helper functions
   const handlePasswordVisibilityPress = (icon: String,
@@ -81,36 +81,22 @@ const handleRegisterAction = () => {
 
     registerUser(body)
     .then((data) => {
-      console.log('User registered successfully:', data);
-      navigation.goBack()
+      setShouldShowModal(true);
+      setIsSuccess(true)
+      setModalMessage('User registered successfully!')
     })
+
     .catch((error) => {
-      if (error.response) {
-        console.error('Error response:', error.response);
-      } else if (error.request) {
-          console.error('Error request:', error.request);
-      } else {
-          console.error('Error message:', error.message);
-      }
+      setShouldShowModal(true);
+      setModalMessage(error.response.data.message)
       throw error;
     });
 
-    // chamada para o back
-    // load screen
-    // setUnnavailableEmail(false)
-    // setUnnavailableUsername(false)
+}
 
-    // retorno falha
-      // se sem internet ou conexão com o back
-        // mostrar mensagem de erro
-
-      // se email já utilizado
-        // setUnnavailableEmail(true)
-      
-      // se username já utilizado
-        // setUnnavailableUsername(true)
-
-    // retorno sucesso
+const handleModalClose = () => {
+  setShouldShowModal(false);
+  if(isSuccess) { navigation.goBack() }
 }
 
   return (
@@ -132,7 +118,6 @@ const handleRegisterAction = () => {
             />
           </View>
           { isUsernameInputEmpty && <EmptyFieldError/> }
-          { unnavailableUsername && <UnnavailableUsernameError/> }
           
           <Text style={styles.label}>E-mail</Text>
           <View style={styles.inputContainer}>
@@ -145,7 +130,6 @@ const handleRegisterAction = () => {
           </View>
           { isEmailInputEmpty && <EmptyFieldError/> }
           { !isEmailValid && <InvalidEmailError/> }
-          { unnavailableEmail && <UnnavailableEmailError/> }
           
           <Text style={styles.label}>Password</Text>
           <View style={styles.inputContainer}>
@@ -204,6 +188,11 @@ const handleRegisterAction = () => {
         </TouchableOpacity>
 
       </View>
+
+      <WarningModal
+       visible = {shouldShowModal} 
+       onClose={handleModalClose}
+       message={ modalMessage } />
 
     </ImageBackground>
   );
