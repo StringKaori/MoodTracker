@@ -43,3 +43,23 @@ export const newMoodEntry = async (userData: NewMoodType) => {
         throw error;
     }
 };
+
+export const getPastWeekMoods = async () => {
+    try {
+        const response = await api.get('/mood/lastWeek');
+        return response.data;
+    } catch (error) {
+        console.error('Error in the user auth:', error);
+        throw error;
+    }
+};
+
+export const getPastSixMonthsMoods = async () => {
+    try {
+        const response = await api.get('/mood/lastSemester');
+        return response.data;
+    } catch (error) {
+        console.error('Error in the user auth:', error);
+        throw error;
+    }
+};

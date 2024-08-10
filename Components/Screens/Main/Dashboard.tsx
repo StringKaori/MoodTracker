@@ -2,14 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ImageBackground, Dimensions, TouchableOpacity, Text, ViewStyle } from 'react-native';
 import { MoodTypes, MoodTypesColor, MoodTypesString } from '../../Helpers/Enums/MoodTypes';
 import { BarChart, barDataItem, stackDataItem } from "react-native-gifted-charts";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { generateRandomString } from '../../Helpers/ConvenienceFunctions/GenerateRandomString';
 import MoodCardBuilder from '../../Helpers/MoodCardBuilder';
-import DefaultMoodType from '../../Helpers/Interfaces/DefaultMoodType';
+import { getPastSixMonthsMoods, getPastWeekMoods } from '../../Helpers/RequestBase';
+import { PastSixMonthsMoodType, PastMoodType } from '../../Helpers/Interfaces/RequestTypes';
+import LoadingScreen from '../../Helpers/LoadingScreen';
 
 const screenWidth = Dimensions.get('window').width
 
 export default function Dashboard() {
+
   const barWidth = (screenWidth * 0.5) / 3.2
 
   const activeButton: ViewStyle = {
@@ -30,9 +33,45 @@ export default function Dashboard() {
   const [shouldShowWeeklyChart, setShouldShowWeeklyChart] = useState<boolean>(true)
   const [shouldShowMonthlyChart, setShouldShowMonthlyChart] = useState<boolean>(false)
 
+  const [weeklyMoods, setWeeklyMoods] = useState<PastMoodType[]>()
+  const [monthlyMoods, setMonthlyMoods] = useState<PastSixMonthsMoodType[]>()
+  const [isLoading, setIsLoading] = useState(false)
+
+  const fetchPastWeekMoods = async () => {
+    setIsLoading(true)
+    try {
+        const result = await getPastWeekMoods();
+        setWeeklyMoods(result);
+        setIsLoading(false);
+    } catch (error) {
+        setIsLoading(false);
+        // Show error modal
+    }
+  };
+
+  const fetchPastMonthMoods = async () => {
+    setIsLoading(true)
+    try {
+        const result = await getPastSixMonthsMoods();
+        setMonthlyMoods(result);
+        setIsLoading(false);
+    } catch (error) {
+        setIsLoading(false);
+        // Show error modal
+    }
+  };
+
+  useEffect(() => {
+    fetchPastWeekMoods();
+    fetchPastMonthMoods();
+  }, []);
+
   const handlePress = (didPressWeekly: boolean) => {
     const weeklyState = didPressWeekly ? activeButton : inactiveButton
     const monthlyState = !didPressWeekly ? activeButton : inactiveButton
+
+    if(didPressWeekly) { fetchPastWeekMoods() }
+    else { fetchPastMonthMoods() }
 
     setWeeklyBorderWidth(weeklyState)
     setMonthlyBorderWidth(monthlyState)
@@ -40,147 +79,49 @@ export default function Dashboard() {
     setShouldShowWeeklyChart(didPressWeekly)
     setShouldShowMonthlyChart(!didPressWeekly)
   }
-  
-  // request enviando o username
-  // retorna um array assim do top 4 moods mais utilizados:
-  let weeklyMoodsMock = [
-    {
-      "id": 1,
-      "quantity": 15 
-    },
-    {
-      "id": 8,
-      "quantity": 10 
-    },
-    {
-      "id": 10,
-      "quantity": 40 
-    },
-    {
-      "id": 25,
-      "quantity": 50 
-    },
-  ]
-
-  let monthlyMoodsMock = [
-    {
-      "stack": [
-        {
-          "id": 1,
-          "quantity": 15
-        },
-        {
-          "id": 8,
-          "quantity": 5
-        },
-      ],
-      "label": 'Jan',
-    },
-    {
-      "stack": [
-        {
-          "id": 10,
-          "quantity": 15
-        },
-        {
-          "id": 25,
-          "quantity": 15
-        },
-      ],
-      "label": 'Fev', 
-    },
-    {
-      "stack": [
-        {
-          "id": 35,
-          "quantity": 15
-        },
-        {
-          "id": 1,
-          "quantity": 15
-        },
-      ],
-      "label": 'Mar',
-    },
-    {
-      "stack": [
-        {
-          "id": 8,
-          "quantity": 15
-        },
-        {
-          "id": 10,
-          "quantity": 15
-        },
-      ],
-      "label": 'Apr',
-    },
-    {
-      "stack": [
-        {
-          "id": 25,
-          "quantity": 15
-        },
-        {
-          "id": 30,
-          "quantity": 15
-        },
-      ],
-      "label": 'May',
-    },
-    {
-      "stack": [
-        {
-          "id": 0,
-          "quantity": 15
-        },
-        {
-          "id": 27,
-          "quantity": 15
-        },
-      ],
-      "label": 'Jun',
-    },
-  ]
 
   var barData: barDataItem[] = []
   var stackBarData: stackDataItem[] = []
   var differentMoods: MoodTypes[] = []
   const moodCounts: { [key: string]: number } = {}
 
-  weeklyMoodsMock.forEach(mood => {
-    barData.push({ 
-      value: mood.quantity,
-      label: MoodTypes[mood.id] as MoodTypesString,
-      frontColor: MoodTypesColor[MoodTypes[mood.id] as keyof typeof MoodTypesColor]
+  if(weeklyMoods) {
+    weeklyMoods.forEach(mood => {
+      barData.push({ 
+        value: mood.quantity,
+        label: MoodTypes[mood.id] as MoodTypesString,
+        frontColor: MoodTypesColor[MoodTypes[mood.id] as keyof typeof MoodTypesColor]
+      })
     })
-  })
+  }
 
-  monthlyMoodsMock.forEach(mood => {
-    const stacks = mood["stack"].map(stack => {
-      const moodString = MoodTypes[stack.id] as MoodTypesString
-      if (!moodCounts[moodString]) {
-        moodCounts[moodString] = 0;
-      }
-      moodCounts[moodString] += stack.quantity;
-
-      if (!differentMoods.includes(stack.id)) {
-        differentMoods.push(stack.id);
-      }
-      
-      return {
-          value: stack.quantity,
-          color: MoodTypesColor[MoodTypes[stack.id] as keyof typeof MoodTypesColor],
-          marginBottom: 2
-      };
-  });
-    stackBarData.push(
-      {
-        stacks: stacks,
-        label: mood["label"]
-      }
-    )
-  })
+  if(monthlyMoods) {
+    monthlyMoods.forEach(mood => {
+      const stacks = mood.stack.map(stack => {
+        const moodString = MoodTypes[stack.id] as MoodTypesString
+        if (!moodCounts[moodString]) {
+          moodCounts[moodString] = 0;
+        }
+        moodCounts[moodString] += stack.quantity;
+  
+        if (!differentMoods.includes(stack.id)) {
+          differentMoods.push(stack.id);
+        }
+        
+        return {
+            value: stack.quantity,
+            color: MoodTypesColor[MoodTypes[stack.id] as keyof typeof MoodTypesColor],
+            marginBottom: 2
+        };
+    });
+      stackBarData.push(
+        {
+          stacks: stacks,
+          label: mood.label
+        }
+      )
+    })
+  }
 
   return (
     <ImageBackground 
@@ -189,6 +130,8 @@ export default function Dashboard() {
      style={styles.background}>
       <StatusBar style="auto" />
       <View style={styles.container}>
+        
+        {isLoading && <LoadingScreen/>}
 
         <View style={styles.chartTypeSelectionContainer}>
           <TouchableOpacity 

@@ -72,7 +72,7 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
     <View style={styles.container}>
 
         <View style={styles.header}>
-          <Text style={styles.headerText}>Moods List</Text>
+          <Text style={styles.headerText}>Past Moods List</Text>
         </View>
 
         <ScrollView>

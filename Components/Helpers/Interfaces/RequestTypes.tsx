@@ -13,3 +13,13 @@ export interface NewMoodType {
     id: number,
     note: string
 }
+
+export interface PastMoodType {
+    id: number,
+    quantity: number
+}
+
+export interface PastSixMonthsMoodType {
+    stack: PastMoodType[],
+    label: string
+}
