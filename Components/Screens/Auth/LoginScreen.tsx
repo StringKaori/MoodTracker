@@ -4,8 +4,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/navigation';
 import { EmailOrPasswordIsWrongError } from '../../Helpers/Errors/ErrorTexts';
 import { CommonActions } from '@react-navigation/native';
-// npm install axios
-// import axios from 'axios';
+import LoginBodyType from '../../Helpers/Interfaces/LoginBodyType';
+import { userLogin } from '../../Helpers/RequestBase';
 
 type AuthScreenProps = {
   navigation: AuthScreenNavigationProp;
@@ -26,28 +26,30 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
   }
 
   const handleLoginAction = () => {
-    const body = {
+    setWrongEmailOrPassword(false)
+    const body: LoginBodyType = {
       email: emailInput,
       password: passwordInput,
     }
-    // chamada para o back
-    // load screen
-    // setWrongEmailOrPassword(false) 
 
-    // caso falha
-      // se sem internet ou back offline
-        // mostrar mensagem de erro
+    userLogin(body)
+    .then((data) => {
+      global.token = data.signToken
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'HomeNavigator' }],
+        })
+      );
+    })
 
-      // se email ou senha inválidos
-        // setWrongEmailOrPassword(true)
-
-    // caso sucesso
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: 'HomeNavigator' }],
-      })
-    );
+    .catch((error) => {
+      if(error.response.data.message == "Usuário ou senha inválidos.") {
+        setWrongEmailOrPassword(true)
+      }
+      // throw error;
+    });
+    
   }
 
   const handleRegisterAction = () => {
