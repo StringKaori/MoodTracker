@@ -19,11 +19,6 @@ const api = axios.create({
 // });
 
 export const registerUser = async (userData: RegisterType) => {
-    console.log('====================================');
-    console.log('Base URL:', process.env.EXPO_PUBLIC_REACT_NATIVE_SERVER_URL);
-
-console.log(baseURLString);
-console.log('====================================');
     try {
         const response = await api.post('/user/register', userData);
         return response.data;
