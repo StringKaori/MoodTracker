@@ -12,6 +12,7 @@
     "@react-navigation/bottom-tabs": "^6.5.16",
     "@react-navigation/native": "^6.1.14",
     "@react-navigation/stack": "^6.4.1",
+    "axios": "^1.7.3",
     "expo": "^51.0.24",
     "expo-status-bar": "~1.12.1",
     "gifted-charts-core": "^0.1.29",

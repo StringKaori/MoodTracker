@@ -3,6 +3,8 @@ import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, TextInput } 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { DifferentPasswordsError, EmptyFieldError, InvalidEmailError, UnnavailableEmailError, UnnavailableUsernameError } from '../../Helpers/Errors/ErrorTexts';
 import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/navigation';
+import RegisterType from '../../Helpers/Interfaces/RegisterType';
+import { registerUser } from '../../Helpers/RequestBase';
 
 type AuthScreenProps = {
     navigation: AuthScreenNavigationProp;
@@ -71,11 +73,27 @@ const handleRegisterAction = () => {
 
     if (!passwordAreTheSame || !emailIsValid) { return; }
 
-    const body = {
+    const body: RegisterType = {
       username: usernameInput,
       email: emailInput,
       password: passwordInput,
     }
+
+    registerUser(body)
+    .then((data) => {
+      console.log('User registered successfully:', data);
+      navigation.goBack()
+    })
+    .catch((error) => {
+      if (error.response) {
+        console.error('Error response:', error.response);
+      } else if (error.request) {
+          console.error('Error request:', error.request);
+      } else {
+          console.error('Error message:', error.message);
+      }
+      throw error;
+    });
 
     // chamada para o back
     // load screen
@@ -93,7 +111,6 @@ const handleRegisterAction = () => {
         // setUnnavailableUsername(true)
 
     // retorno sucesso
-    navigation.goBack()
 }
 
   return (
