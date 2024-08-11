@@ -1,4 +1,4 @@
-import { LoginBodyType, RegisterBodyType, NewMoodType, UpdateImageType } from './Interfaces/RequestTypes';
+import { LoginBodyType, RegisterBodyType, NewMoodType, UpdateImageType, UpdateMoodEntryType, UserChangeType, DeleteMoodEntry } from './Interfaces/RequestTypes';
 import axios from 'axios';
 
 const baseURLString = process.env.EXPO_PUBLIC_REACT_NATIVE_SERVER_URL
@@ -77,6 +77,46 @@ export const getAllMoods = async () => {
 export const updateProfileImage = async (imageData: UpdateImageType) => {
     try {
         const response = await api.post('/user/updateProfileImage', imageData);
+        return response.data;
+    } catch (error) {
+        console.error('Error in the user auth:', error);
+        throw error;
+    }
+};
+
+export const getHomeData = async () => {
+    try {
+        const response = await api.get('/user/track');
+        return response.data;
+    } catch (error) {
+        console.error('Error in the user auth:', error);
+        throw error;
+    }
+};
+
+export const updateMoodEntry = async (data: UpdateMoodEntryType) => {
+    try {
+        const response = await api.post('/mood/updateNote', data);
+        return response.data;
+    } catch (error) {
+        console.error('Error in the user auth:', error);
+        throw error;
+    }
+};
+
+export const updateUserData = async (data: UserChangeType) => {
+    try {
+        const response = await api.post('/user/update', data);
+        return response.data;
+    } catch (error) {
+        console.error('Error in the user auth:', error);
+        throw error;
+    }
+};
+
+export const deleteMoodEntry = async (data: DeleteMoodEntry) => {
+    try {
+        const response = await api.delete('/mood/delete', { data });
         return response.data;
     } catch (error) {
         console.error('Error in the user auth:', error);

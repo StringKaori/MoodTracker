@@ -9,6 +9,8 @@ import { MoodTypes, MoodTypesString } from './Enums/MoodTypes';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { CharacterLimitReached, NoNotesTaken } from './Errors/ErrorTexts';
 import { Dimensions } from 'react-native';
+import { UpdateMoodEntryType } from './Interfaces/RequestTypes';
+import { updateMoodEntry } from './RequestBase';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -60,15 +62,20 @@ export default function RecentMoodDetailView({ route, navigation }: RecentMoodPr
   }
 
   const didPressToSaveChanges = () => {
-    const body = {
-      note: alteredNotes
+    const body: UpdateMoodEntryType = {
+      mood_id: moodData.mood_id!,
+      text_content: alteredNotes
     }
-    // request para o back
-    // caso sucesso
-    navigation.goBack()
 
-    // caso falha
-      // modal com o erro do back
+    updateMoodEntry(body)
+     .then((data) => {
+        navigation.goBack()
+     })
+
+     .catch((error) => {
+      console.error(error.message)
+      // throw error;
+     });
   }
 
   return (
@@ -118,7 +125,6 @@ export default function RecentMoodDetailView({ route, navigation }: RecentMoodPr
                   <Text style={styles.saveChangesText}>Save Changes</Text>
                 </TouchableOpacity>
               }
-
             </View>
           </ScrollView>
       </View>

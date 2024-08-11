@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, TextInput } from 'react-native';
+import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { DifferentPasswordsError, EmptyFieldError, InvalidEmailError, UnnavailableEmailError, UnnavailableUsernameError } from '../../Helpers/Errors/ErrorTexts';
 import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/navigation';
+import { DifferentPasswordsError, EmptyFieldError, InvalidEmailError } from '../../Helpers/Errors/ErrorTexts';
+import WarningModal from '../../Helpers/Errors/WarningModal';
 import { RegisterBodyType } from '../../Helpers/Interfaces/RequestTypes';
 import { registerUser } from '../../Helpers/RequestBase';
-import WarningModal from '../../Helpers/Errors/WarningModal';
 
 type AuthScreenProps = {
     navigation: AuthScreenNavigationProp;

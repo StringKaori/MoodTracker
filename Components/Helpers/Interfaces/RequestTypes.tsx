@@ -1,4 +1,4 @@
-import DefaultMoodType from "./DefaultMoodType"
+import DefaultMoodType, { NavigationMoodType } from "./DefaultMoodType"
 
 export interface LoginBodyType {
     email: string,
@@ -32,15 +32,24 @@ export interface UpdateImageType {
 
 export interface UserDataType {
     username : string,
-    streakKind :  string,
     email: string,
-    password: string,
-    profileImage: string,
-    recentMoods : DefaultMoodType[]
+    streakKind?:  string,
+    profileImage?: string,
+    recentMoods: DefaultMoodType[]
 }
 
 export interface UserChangeType {
     username?: string,
     email?: string,
     password?: string,
+    currentPassword?: string
+}
+
+export interface UpdateMoodEntryType {
+    mood_id: string,
+    text_content: string
+}
+
+export interface DeleteMoodEntry {
+    mood_id: string
 }

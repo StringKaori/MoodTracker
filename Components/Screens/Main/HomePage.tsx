@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import MoodifyButton from '../../Helpers/MoodifyButton';
 import DefaultMoodType, { NavigationMoodType } from '../../Helpers/Interfaces/DefaultMoodType';
 import MoodCardBuilder from '../../Helpers/MoodCardBuilder';
@@ -9,71 +9,52 @@ import { convertToDateString } from '../../Helpers/ConvenienceFunctions/ConvertT
 import generateTestData from '../../Helpers/ConvenienceFunctions/GenerateTestData';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import { useState } from 'react';
-import { updateProfileImage } from '../../Helpers/RequestBase';
+import { useEffect, useState } from 'react';
+import { getHomeData, updateProfileImage } from '../../Helpers/RequestBase';
 import { UpdateImageType, UserDataType } from '../../Helpers/Interfaces/RequestTypes';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../../assets/Images/ProfilePic.png";
 
-const dataMock: UserDataType = {
-  "username" : "Schadenfreude",
-  "streakKind" : "Evil Streak",
-  "email" : "Schadenfreude@mail.com",
-  "password" : "Schadenfreude4life",
-  "profileImage": "1354151514r5dfwa43rasd",
-  "recentMoods" : [
-    { 
-      id: 0,
-      date: new Date(2024, 8, 18, 14, 30, 0),
-      note: "fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis "
-    },
-    { 
-      id: 9,
-      date: new Date(2024, 6, 19, 9, 0, 0),
-    },
-    { 
-      id: 18,
-      date: new Date(2024, 6, 20, 18, 45, 0),
-    },
-    { 
-      id: 27,
-      date: new Date(2024, 6, 21, 23, 15, 0),
-      note: "fiquei muito feliz pq eu comi méqui donaudis"
-    },
-    { 
-      id: 0,
-      date: new Date(2024, 8, 18, 12, 0, 0),
-      note: "fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis, fiquei muito puto pq eu n comi méqui donaudis,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis ,fiquei muito puto pq eu n comi méqui donaudis "
-    },
-    { 
-      id: 9,
-      date: new Date(2024, 6, 19, 8, 30, 0),
-    },
-    { 
-      id: 18,
-      date: new Date(2024, 6, 20, 15, 30, 0),
-    },
-    { 
-      id: 27,
-      date: new Date(2024, 6, 21, 20, 0, 0),
-      note: "fiquei muito feliz pq eu comi méqui donaudis"
-    }
-  ]
-}
-
-global.userData= dataMock
-
 type HomeProps = {
   navigation: HomePageNavigationProp;
 };
 
 export default function HomePage({ navigation }: HomeProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [refreshing, setRefreshing] = useState(false); // Adicionando estado para controle de refresh
+  const [imageBytes, setImageBytes] = useState<string | null>(null);
+
+  const fetchHomeData = async () => {
+    try {
+      const result: UserDataType = await getHomeData();
+      global.userData = result;
+      setIsLoaded(true);
+    } catch (error) {
+      // Show error modal
+    }
+  };
+
+  useEffect(() => {
+    fetchHomeData();
+  }, []);
+
+  useEffect(() => {
+    if (isLoaded) {
+      navigation.navigate('HomeTabNavigator');
+    }
+  }, [isLoaded]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchHomeData();
+    setRefreshing(false);
+  };
 
   const handleRecentMoodPress = (data: DefaultMoodType) => {
-    // se não for assim o ts reclama que é passado um valor não serializado via navigation
     let navigationData: NavigationMoodType = {
+      mood_id: data.mood_id,
       id: data.id,
       dateString: convertToDateString(data.date!),
       note: data.note
@@ -88,8 +69,6 @@ export default function HomePage({ navigation }: HomeProps) {
   const handleMoodifyPress = () => {
     navigation.navigate('MoodifyScreen');
   }
-
-  const [imageBytes, setImageBytes] = useState<string | null>(null);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -111,15 +90,15 @@ export default function HomePage({ navigation }: HomeProps) {
       setImageBytes(base64);
 
       const body: UpdateImageType = {
-        profile_img : `${generateRandomString({ length: 223 })}==`
+        profile_img: `${generateRandomString({ length: 223 })}==`
       }
 
       updateProfileImage(body)
-      .then((data) => { })
-      .catch((error) => {
-        console.error(error.response.data.message)
-        throw error;
-      });
+        .then((data) => { })
+        .catch((error) => {
+          console.error(error.response.data.message)
+          throw error;
+        });
     } catch (error) {
       console.error('Error converting image to bytes:', error);
     }
@@ -135,49 +114,52 @@ export default function HomePage({ navigation }: HomeProps) {
      resizeMode="cover"
      style={styles.background}>
 
-    <ScrollView 
-     showsVerticalScrollIndicator={false}
-     style={styles.scrollview}>
-      <View style = {styles.absoluteContainer}>
-        <StatusBar style="auto" />
-        <Image 
-         source={require(profileBackgroundPath)}
-         resizeMode="cover"/>
-
-        <TouchableOpacity 
-         style={styles.profilePicture}
-         onPress={handleProfilePictureChange}>
+      <ScrollView 
+       showsVerticalScrollIndicator={false}
+       style={styles.scrollview}
+       refreshControl={
+         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+       }>
+        <View style={styles.absoluteContainer}>
+          <StatusBar style="auto" />
           <Image 
-            source={imageBytes ? { uri: `data:image/png;base64,${imageBytes}` } : require(profilePicturePath)} 
-            style={styles.profileImage}/>
-         </TouchableOpacity>
-      </View>
+           source={require(profileBackgroundPath)}
+           resizeMode="cover"/>
 
-      <View style={styles.reset}/>
-
-      <View style={styles.container}>
-
-        <View style={styles.usernameEditContainer}>
-          <TouchableOpacity
-           onPress={handleEditButtonPress}>
-            <FontAwesome 
-              name = { "edit" } 
-              size = { 25 } 
-              style = {styles.usernameEditIcon}/>
+          <TouchableOpacity 
+           style={styles.profilePicture}
+           onPress={handleProfilePictureChange}>
+            <Image 
+              source={imageBytes ? { uri: `data:image/png;base64,${imageBytes}` } : require(profilePicturePath)} 
+              style={styles.profileImage}/>
           </TouchableOpacity>
-          <Text style={styles.userName}>
-            {dataMock["username"]}
-          </Text>
         </View>
 
-        <Text style={styles.streakKind}>
-          {dataMock["streakKind"]}
-        </Text>
+        <View style={styles.reset}/>
+
+        <View style={styles.container}>
+          <View style={styles.usernameEditContainer}>
+            <TouchableOpacity
+             onPress={handleEditButtonPress}>
+              <FontAwesome 
+                name={"edit"} 
+                size={25} 
+                style={styles.usernameEditIcon}/>
+            </TouchableOpacity>
+            <Text style={styles.userName}>
+              {global.userData.username}
+            </Text>
+          </View>
+
+          <Text style={styles.streakKind}>
+            {global.userData.streakKind != "null" ? global.userData.streakKind : "You don't have a streak yet"}
+          </Text>
+
           <MoodifyButton handlePress={handleMoodifyPress}/>
 
-          <View style = {styles.recentMoodsContainer}>
+          <View style={styles.recentMoodsContainer}>
             {
-                dataMock["recentMoods"].map(mood => (
+                global.userData.recentMoods.map((mood: DefaultMoodType) => (
                   <MoodCardBuilder 
                    mood={mood}
                    buttonSize={130}
@@ -185,25 +167,23 @@ export default function HomePage({ navigation }: HomeProps) {
                     borderBottomWidth: 7,
                     borderRightWidth: 7}}
                    middleTextString={convertToDateString(mood.date!)}
-                   iconBackgroundColor = {"#EEEEEE"}
-                   key = { generateRandomString({ length: 16 }) }
-                   handlePress = {handleRecentMoodPress}/>
+                   iconBackgroundColor={"#EEEEEE"}
+                   key={generateRandomString({ length: 16 })}
+                   handlePress={handleRecentMoodPress}/>
                 ))
             }
           </View>
-          
-      </View>
-      <TouchableOpacity
-       onPress={generateTestData}>
-        <Text>Gerar dados de teste</Text>
-      </TouchableOpacity>
-    </ScrollView>
-
+        </View>
+        <TouchableOpacity
+         onPress={generateTestData}>
+          <Text>Gerar dados de teste</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </ImageBackground>
   );
 }
 
-const profilePicProportion: DimensionValue = 150
+const profilePicProportion: DimensionValue = 150;
 
 const styles = StyleSheet.create({
   scrollview: {
@@ -215,7 +195,7 @@ const styles = StyleSheet.create({
   },
 
   absoluteContainer: {
-    position: `relative`
+    position: 'relative',
   },
 
   background: {
@@ -228,7 +208,7 @@ const styles = StyleSheet.create({
     top: '50%',
     left: '50%',
     transform: [{ translateX: -(profilePicProportion/2) }, { translateY: -25 }],
-    width: profilePicProportion, // Adjust width and height as needed
+    width: profilePicProportion,
     height: profilePicProportion,
   },
   
@@ -258,19 +238,21 @@ const styles = StyleSheet.create({
 
   recentMoodsContainer: {
     marginTop: 8,
-    justifyContent: `space-evenly`,
-    flexDirection: `row`,
-    flexWrap: `wrap`
+    justifyContent: 'space-evenly',
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   },
 
   filterIcon: {
   },
+  
   usernameEditContainer: {
-    flexDirection: `row`,
-    alignItems: `center`,
-    textAlignVertical: `center`,
+    flexDirection: 'row',
+    alignItems: 'center',
+    textAlignVertical: 'center',
   },
+
   usernameEditIcon : {
-    alignSelf: `center`,
+    alignSelf: 'center',
   }
 });

@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, ImageBackground, Text, ScrollView, RefreshControl } from 'react-native';
+import { StyleSheet, View, ImageBackground, Text, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import MoodCardBuilder from '../../Helpers/MoodCardBuilder';
 import { generateRandomString } from '../../Helpers/ConvenienceFunctions/GenerateRandomString';
 import { convertToDateString } from '../../Helpers/ConvenienceFunctions/ConvertToDateString';
 import DefaultMoodType, { NavigationMoodType } from '../../Helpers/Interfaces/DefaultMoodType';
 import { HomePageNavigationProp } from '../../Helpers/Interfaces/RootStackParamList';
 import { useEffect, useState } from 'react';
-import { getAllMoods } from '../../Helpers/RequestBase';
+import { deleteMoodEntry, getAllMoods } from '../../Helpers/RequestBase';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { DeleteMoodEntry } from '../../Helpers/Interfaces/RequestTypes';
 
 type NavigationProps = {
   navigation: HomePageNavigationProp;
@@ -32,6 +34,7 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
 
   const handleCardPress = (mood: DefaultMoodType) => {
     let navigationData: NavigationMoodType = {
+      mood_id: mood.mood_id,
       id: mood.id,
       dateString: convertToDateString(mood.date!),
       note: mood.note
@@ -44,6 +47,24 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
     await fetchAllMoods();
     setRefreshing(false);
   };
+
+  const handleDeleteMood = (mood: DefaultMoodType) => {
+    const body: DeleteMoodEntry = {
+      mood_id: mood.mood_id!
+    }
+console.log('====================================');
+console.log(body);
+console.log('====================================');
+    deleteMoodEntry(body)
+     .then((data) => {  
+        onRefresh()
+     })
+
+     .catch((error) => {
+        console.error(error.message)
+        // throw error;
+     });
+  }
 
   return (
     <ImageBackground 
@@ -65,14 +86,22 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
           <View style={styles.moodsContainer}>
             { allMoods && allMoods.length > 0 ? (
                 allMoods.map(mood => (
-                  <MoodCardBuilder 
-                  mood={mood}
-                  buttonSize={130}
-                  iconBorderStyle={{borderWidth: 3}}
-                  middleTextString={convertToDateString(mood.date!)}
-                  iconBackgroundColor={"#EEEEEE"}
-                  handlePress={handleCardPress}
-                  key={generateRandomString({ length: 16 })} />
+                  <View key={generateRandomString({ length: 16 })}>
+                    <TouchableOpacity 
+                     onPress={() => handleDeleteMood(mood)}>
+                      <FontAwesome 
+                        name={"trash"}
+                        size={20} /> 
+                    </TouchableOpacity>
+                    <MoodCardBuilder 
+                     mood={mood}
+                     buttonSize={130}
+                     iconBorderStyle={{borderWidth: 3}}
+                     middleTextString={convertToDateString(mood.date!)}
+                     iconBackgroundColor={"#EEEEEE"}
+                     handlePress={handleCardPress}
+                     key={generateRandomString({ length: 16 })} />
+                  </View>
                 ))
               ) : (<Text>You haven't made a entry yet :/ </Text>)
             }

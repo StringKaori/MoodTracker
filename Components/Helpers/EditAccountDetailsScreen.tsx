@@ -2,20 +2,32 @@ import React, { useState } from "react";
 import { View, Text, TextInput, ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { UserChangeType } from "./Interfaces/RequestTypes";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { MainStackParamList } from "./Interfaces/RootStackParamList";
+import { updateUserData } from "./RequestBase";
 
-export default function EditAccountDetailsScreen() {
+interface Props {
+    navigation: StackNavigationProp<MainStackParamList, 'EditAccountDetails'>;
+  }
+
+export default function EditAccountDetailsScreen({navigation}: Props) {
     const [username, setUsername] = useState(global.userData.username);
     const [email, setEmail] = useState(global.userData.email);
-    const [password, setPassword] = useState(global.userData.password);
+    const [password, setPassword] = useState("");
+    const [currentPassword, setCurrentPassword] = useState("");
 
     const [seePasswordIcon, setSeePasswordIcon] = useState<string>('eye-slash');
+    const [seeCurrentPasswordIcon, setCurrentSeePasswordIcon] = useState<string>('eye-slash');
+
     const [shouldHidePassword, setShouldHidePassword] = useState<boolean>(true);
+    const [shouldHideCurrentPassword, setShouldHideCurrentPassword] = useState<boolean>(true);
+    
 
     const hasChanges = () => {
         return (
             username !== global.userData.username ||
             email !== global.userData.email ||
-            password !== global.userData.password
+            (password !== "" && currentPassword !== "")
         );
     };
 
@@ -23,6 +35,12 @@ export default function EditAccountDetailsScreen() {
         const newIcon = seePasswordIcon === "eye-slash" ? "eye" : "eye-slash";
         setSeePasswordIcon(newIcon);
         setShouldHidePassword(!shouldHidePassword);
+    };
+
+    const handleCurrentPasswordVisibilityPress = () => {
+        const newIcon = seeCurrentPasswordIcon === "eye-slash" ? "eye" : "eye-slash";
+        setCurrentSeePasswordIcon(newIcon);
+        setShouldHideCurrentPassword(!shouldHideCurrentPassword);
     };
 
     const handleSaveChanges = () => {
@@ -36,9 +54,23 @@ export default function EditAccountDetailsScreen() {
             body.email = email;
         }
     
-        if (password !== global.userData.password) {
+        if (password !== "" && currentPassword !== "") {
             body.password = password;
+            body.currentPassword = currentPassword;
         }
+        console.log('====================================');
+        console.log(body);
+        console.log('====================================');
+        updateUserData(body)
+        
+         .then((data) => {
+            navigation.goBack()
+         })
+
+         .catch((error) => {
+            console.error(error.data.message)
+            // throw error;
+         });
     
         console.log(body);
     }
@@ -63,7 +95,7 @@ export default function EditAccountDetailsScreen() {
                     onChangeText={setEmail}
                 />
 
-                <Text style={styles.label}>Password: </Text>
+                <Text style={styles.label}>New Password: </Text>
                 <View style={styles.passwordContainer}>
                     <TextInput 
                         style={styles.textContainer}
@@ -76,6 +108,23 @@ export default function EditAccountDetailsScreen() {
                         style={styles.passwordEye}>
                         <FontAwesome 
                             name={seePasswordIcon}
+                            size={20} /> 
+                    </TouchableOpacity>
+                </View>
+
+                <Text style={styles.label}>Current password: </Text>
+                <View style={styles.passwordContainer}>
+                    <TextInput 
+                        style={styles.textContainer}
+                        value={currentPassword}
+                        onChangeText={setCurrentPassword}
+                        secureTextEntry={shouldHideCurrentPassword}
+                    />
+                    <TouchableOpacity
+                        onPress={handleCurrentPasswordVisibilityPress}
+                        style={styles.passwordEye}>
+                        <FontAwesome 
+                            name={seeCurrentPasswordIcon}
                             size={20} /> 
                     </TouchableOpacity>
                 </View>
