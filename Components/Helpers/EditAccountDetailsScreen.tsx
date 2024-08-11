@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { UserChangeType } from "./Interfaces/RequestTypes";
+import { LoginBodyType, UserChangeType } from "./Interfaces/RequestTypes";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "./Interfaces/RootStackParamList";
-import { updateUserData } from "./RequestBase";
+import { updateToken, updateUserData, userLogin } from "./RequestBase";
 
 interface Props {
     navigation: StackNavigationProp<MainStackParamList, 'EditAccountDetails'>;
@@ -22,7 +22,6 @@ export default function EditAccountDetailsScreen({navigation}: Props) {
     const [shouldHidePassword, setShouldHidePassword] = useState<boolean>(true);
     const [shouldHideCurrentPassword, setShouldHideCurrentPassword] = useState<boolean>(true);
     
-
     const hasChanges = () => {
         return (
             username !== global.userData.username ||
@@ -43,6 +42,22 @@ export default function EditAccountDetailsScreen({navigation}: Props) {
         setShouldHideCurrentPassword(!shouldHideCurrentPassword);
     };
 
+    const updateLogin = () => {
+        const body: LoginBodyType = {
+            email: email,
+            password: password,
+        }
+        userLogin(body)
+        .then((data) => {
+        global.token = data.signToken
+        updateToken()
+        })
+
+        .catch((error) => {
+        // throw error;
+        });
+    }
+
     const handleSaveChanges = () => {
         const body: UserChangeType = {};
 
@@ -58,12 +73,11 @@ export default function EditAccountDetailsScreen({navigation}: Props) {
             body.password = password;
             body.currentPassword = currentPassword;
         }
-        console.log('====================================');
-        console.log(body);
-        console.log('====================================');
+
         updateUserData(body)
         
-         .then((data) => {
+         .then(() => {
+            updateLogin()
             navigation.goBack()
          })
 

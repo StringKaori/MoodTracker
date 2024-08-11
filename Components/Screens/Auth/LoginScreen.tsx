@@ -3,8 +3,8 @@ import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, TextInput } 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AuthScreenNavigationProp } from '../../../TypeScriptConvenienceFiles/navigation';
 import { CommonActions } from '@react-navigation/native';
-import { LoginBodyType } from '../../Helpers/Interfaces/RequestTypes';
-import { updateToken, userLogin } from '../../Helpers/RequestBase';
+import { LoginBodyType, UserDataType } from '../../Helpers/Interfaces/RequestTypes';
+import { getHomeData, updateToken, userLogin } from '../../Helpers/RequestBase';
 import WarningModal from '../../Helpers/Errors/WarningModal';
 
 type AuthScreenProps = {
@@ -26,6 +26,18 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
     setShouldHidePassword(!shouldHidePassword)
   }
 
+  const fetchHomeData = async () => {
+    try {
+      const result: UserDataType = await getHomeData();
+      console.log('====================================');
+      console.log(result);
+      console.log('====================================');
+      global.userData = result; 
+    } catch (error) {
+      console.error('Error fetching home data:', error);
+    }
+  };
+
   const handleLoginAction = () => {
     const body: LoginBodyType = {
       email: emailInput,
@@ -36,6 +48,7 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
     .then((data) => {
       global.token = data.signToken
       updateToken()
+      fetchHomeData()
       navigation.dispatch(
         CommonActions.reset({
           index: 0,

@@ -102,7 +102,7 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
                      key={generateRandomString({ length: 16 })} />
                   </View>
                 ))
-              ) : (<Text>You haven't made an entry yet :/ </Text>)
+              ) : (<Text style={{color: `red`}}>You haven't made an entry yet :/ </Text>)
             }
           </View>
         </ScrollView>
