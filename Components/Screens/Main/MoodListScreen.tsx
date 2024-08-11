@@ -52,9 +52,6 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
     const body: DeleteMoodEntry = {
       mood_id: mood.mood_id!
     }
-console.log('====================================');
-console.log(body);
-console.log('====================================');
     deleteMoodEntry(body)
      .then((data) => {  
         onRefresh()
