@@ -5,10 +5,11 @@ import { generateRandomString } from '../../Helpers/ConvenienceFunctions/Generat
 import { convertToDateString } from '../../Helpers/ConvenienceFunctions/ConvertToDateString';
 import DefaultMoodType, { NavigationMoodType } from '../../Helpers/Interfaces/DefaultMoodType';
 import { HomePageNavigationProp } from '../../Helpers/Interfaces/RootStackParamList';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { deleteMoodEntry, getAllMoods } from '../../Helpers/RequestBase';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { DeleteMoodEntry } from '../../Helpers/Interfaces/RequestTypes';
+import { useFocusEffect } from '@react-navigation/native';
 
 type NavigationProps = {
   navigation: HomePageNavigationProp;
@@ -24,13 +25,16 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
       const result = await getAllMoods();
       setAllMoods(result);
     } catch (error) {
+      console.error('Error fetching all moods:', error);
       // Show error modal
     }
   };
 
-  useEffect(() => {
-    fetchAllMoods();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchAllMoods(); // Fetch data when the screen gains focus
+    }, [])
+  );
 
   const handleCardPress = (mood: DefaultMoodType) => {
     let navigationData: NavigationMoodType = {
@@ -48,19 +52,17 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
     setRefreshing(false);
   };
 
-  const handleDeleteMood = (mood: DefaultMoodType) => {
+  const handleDeleteMood = async (mood: DefaultMoodType) => {
     const body: DeleteMoodEntry = {
       mood_id: mood.mood_id!
     }
-    deleteMoodEntry(body)
-     .then((data) => {  
-        onRefresh()
-     })
-
-     .catch((error) => {
-        console.error(error.message)
-        // throw error;
-     });
+    try {
+      await deleteMoodEntry(body);
+      await fetchAllMoods(); // Refresh the mood list after deletion
+    } catch (error) {
+      console.error('Error deleting mood entry:', error);
+      // Show error modal
+    }
   }
 
   return (
@@ -81,7 +83,7 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
           }
         >
           <View style={styles.moodsContainer}>
-            { allMoods && allMoods.length > 0 ? (
+            { allMoods.length > 0 ? (
                 allMoods.map(mood => (
                   <View key={generateRandomString({ length: 16 })}>
                     <TouchableOpacity 
@@ -100,7 +102,7 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
                      key={generateRandomString({ length: 16 })} />
                   </View>
                 ))
-              ) : (<Text>You haven't made a entry yet :/ </Text>)
+              ) : (<Text>You haven't made an entry yet :/ </Text>)
             }
           </View>
         </ScrollView>
