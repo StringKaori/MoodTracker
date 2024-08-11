@@ -9,10 +9,11 @@ import { convertToDateString } from '../../Helpers/ConvenienceFunctions/ConvertT
 import generateTestData from '../../Helpers/ConvenienceFunctions/GenerateTestData';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getHomeData, updateProfileImage } from '../../Helpers/RequestBase';
 import { UpdateImageType, UserDataType } from '../../Helpers/Interfaces/RequestTypes';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useFocusEffect } from '@react-navigation/native';
 
 const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../../assets/Images/ProfilePic.png";
@@ -22,29 +23,26 @@ type HomeProps = {
 };
 
 export default function HomePage({ navigation }: HomeProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [refreshing, setRefreshing] = useState(false); // Adicionando estado para controle de refresh
+  const [dataChanged, setDataChanged] = useState(false); // Estado para rastrear se os dados foram alterados
+  const [refreshing, setRefreshing] = useState(false);
   const [imageBytes, setImageBytes] = useState<string | null>(null);
 
+  // Função para buscar os dados
   const fetchHomeData = async () => {
     try {
       const result: UserDataType = await getHomeData();
       global.userData = result;
-      setIsLoaded(true);
+      setDataChanged(prev => !prev); // Atualiza o estado para forçar uma re-renderização
     } catch (error) {
-      // Show error modal
+      console.error('Error fetching home data:', error);
     }
   };
 
-  useEffect(() => {
-    fetchHomeData();
-  }, []);
-
-  useEffect(() => {
-    if (isLoaded) {
-      navigation.navigate('HomeTabNavigator');
-    }
-  }, [isLoaded]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchHomeData(); // Busca os dados quando o componente ganha foco
+    }, [])
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -93,12 +91,7 @@ export default function HomePage({ navigation }: HomeProps) {
         profile_img: `${generateRandomString({ length: 223 })}==`
       }
 
-      updateProfileImage(body)
-        .then((data) => { })
-        .catch((error) => {
-          console.error(error.response.data.message)
-          throw error;
-        });
+      await updateProfileImage(body);
     } catch (error) {
       console.error('Error converting image to bytes:', error);
     }
