@@ -1,7 +1,7 @@
 import DefaultMoodType from "../Components/Helpers/Interfaces/DefaultMoodType";
 
 declare global {
-    var recentMoods: DefaultMoodType[]
+    var userData: UserDataType
     var token: string
 }
   

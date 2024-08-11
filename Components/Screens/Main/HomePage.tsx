@@ -11,16 +11,18 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { useState } from 'react';
 import { updateProfileImage } from '../../Helpers/RequestBase';
-import { UpdateImageType } from '../../Helpers/Interfaces/RequestTypes';
+import { UpdateImageType, UserDataType } from '../../Helpers/Interfaces/RequestTypes';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../../assets/Images/ProfilePic.png";
 
-const dataMock = {
+const dataMock: UserDataType = {
   "username" : "Schadenfreude",
   "streakKind" : "Evil Streak",
+  "email" : "Schadenfreude@mail.com",
+  "password" : "Schadenfreude4life",
   "profileImage": "1354151514r5dfwa43rasd",
-  "backgroundImage": "1354151514r5dfwa43rasd",
   "recentMoods" : [
     { 
       id: 0,
@@ -61,7 +63,7 @@ const dataMock = {
   ]
 }
 
-global.recentMoods= dataMock["recentMoods"]
+global.userData= dataMock
 
 type HomeProps = {
   navigation: HomePageNavigationProp;
@@ -77,6 +79,10 @@ export default function HomePage({ navigation }: HomeProps) {
       note: data.note
     }
     navigation.navigate('RecentMoodDetailView', { moodData: navigationData });
+  }
+
+  const handleEditButtonPress = () => {
+    navigation.navigate('EditAccountDetails');
   }
 
   const handleMoodifyPress = () => {
@@ -105,8 +111,9 @@ export default function HomePage({ navigation }: HomeProps) {
       setImageBytes(base64);
 
       const body: UpdateImageType = {
-        profile_img : imageBytes!
+        profile_img : `${generateRandomString({ length: 223 })}==`
       }
+
       updateProfileImage(body)
       .then((data) => { })
       .catch((error) => {
@@ -149,9 +156,20 @@ export default function HomePage({ navigation }: HomeProps) {
       <View style={styles.reset}/>
 
       <View style={styles.container}>
-        <Text style={styles.userName}>
-          {dataMock["username"]}
-        </Text>
+
+        <View style={styles.usernameEditContainer}>
+          <TouchableOpacity
+           onPress={handleEditButtonPress}>
+            <FontAwesome 
+              name = { "edit" } 
+              size = { 25 } 
+              style = {styles.usernameEditIcon}/>
+          </TouchableOpacity>
+          <Text style={styles.userName}>
+            {dataMock["username"]}
+          </Text>
+        </View>
+
         <Text style={styles.streakKind}>
           {dataMock["streakKind"]}
         </Text>
@@ -166,7 +184,7 @@ export default function HomePage({ navigation }: HomeProps) {
                    iconBorderStyle={{borderWidth: 2, borderRadius: 20,
                     borderBottomWidth: 7,
                     borderRightWidth: 7}}
-                   middleTextString={convertToDateString(mood.date)}
+                   middleTextString={convertToDateString(mood.date!)}
                    iconBackgroundColor = {"#EEEEEE"}
                    key = { generateRandomString({ length: 16 }) }
                    handlePress = {handleRecentMoodPress}/>
@@ -247,4 +265,12 @@ const styles = StyleSheet.create({
 
   filterIcon: {
   },
+  usernameEditContainer: {
+    flexDirection: `row`,
+    alignItems: `center`,
+    textAlignVertical: `center`,
+  },
+  usernameEditIcon : {
+    alignSelf: `center`,
+  }
 });

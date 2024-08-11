@@ -4,6 +4,7 @@ import { NavigationMoodType } from "./DefaultMoodType";
 export type MainStackParamList = {
     HomeTabNavigator: undefined;
     RecentMoodDetailView: { moodData: NavigationMoodType };
+    EditAccountDetails: undefined;
     MoodifyScreen: undefined;
 };
 

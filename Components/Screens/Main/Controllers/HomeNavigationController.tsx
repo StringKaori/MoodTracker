@@ -9,6 +9,7 @@ import TabBarIcon from '../../../Helpers/TabBarIcon';
 import MoodListScreen from '../MoodListScreen';
 import { MainStackParamList } from '../../../Helpers/Interfaces/RootStackParamList';
 import MoodifyScreen from '../MoodifyScreen';
+import EditAccountDetailsScreen from '../../../Helpers/EditAccountDetailsScreen';
 
 const Stack = createStackNavigator<MainStackParamList>();
 const Tab = createBottomTabNavigator();
@@ -32,6 +33,10 @@ function HomeNavigationController() {
        name="MoodifyScreen" 
        component={MoodifyScreen} 
        options={{ title: `Moodify Your Day!` }}/>
+      <Stack.Screen 
+       name="EditAccountDetails" 
+       component={EditAccountDetailsScreen} 
+       options={{ title: `Edit account details` }}/>
     </Stack.Navigator>
   );
 }
