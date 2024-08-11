@@ -10,6 +10,8 @@ import generateTestData from '../../Helpers/ConvenienceFunctions/GenerateTestDat
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { useState } from 'react';
+import { updateProfileImage } from '../../Helpers/RequestBase';
+import { UpdateImageType } from '../../Helpers/Interfaces/RequestTypes';
 
 const profileBackgroundPath = "../../../assets/Images/ProfileBackground.png";
 const profilePicturePath = "../../../assets/Images/ProfilePic.png";
@@ -101,6 +103,16 @@ export default function HomePage({ navigation }: HomeProps) {
     try {
       const base64 = await FileSystem.readAsStringAsync(imageUri, { encoding: 'base64' });
       setImageBytes(base64);
+
+      const body: UpdateImageType = {
+        profile_img : imageBytes!
+      }
+      updateProfileImage(body)
+      .then((data) => { })
+      .catch((error) => {
+        console.error(error.response.data.message)
+        throw error;
+      });
     } catch (error) {
       console.error('Error converting image to bytes:', error);
     }

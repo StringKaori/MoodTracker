@@ -23,3 +23,7 @@ export interface PastSixMonthsMoodType {
     stack: PastMoodType[],
     label: string
 }
+
+export interface UpdateImageType {
+    profile_img : string
+}

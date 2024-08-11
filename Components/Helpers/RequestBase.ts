@@ -1,4 +1,4 @@
-import { LoginBodyType, RegisterBodyType, NewMoodType } from './Interfaces/RequestTypes';
+import { LoginBodyType, RegisterBodyType, NewMoodType, UpdateImageType } from './Interfaces/RequestTypes';
 import axios from 'axios';
 
 const baseURLString = process.env.EXPO_PUBLIC_REACT_NATIVE_SERVER_URL
@@ -34,9 +34,9 @@ export const userLogin = async (userData: LoginBodyType) => {
     }
 };
 
-export const newMoodEntry = async (userData: NewMoodType) => {
+export const newMoodEntry = async (moodData: NewMoodType) => {
     try {
-        const response = await api.post('/mood/new', userData);
+        const response = await api.post('/mood/new', moodData);
         return response.data;
     } catch (error) {
         console.error('Error in the user auth:', error);
@@ -67,6 +67,16 @@ export const getPastSixMonthsMoods = async () => {
 export const getAllMoods = async () => {
     try {
         const response = await api.get('/mood/all');
+        return response.data;
+    } catch (error) {
+        console.error('Error in the user auth:', error);
+        throw error;
+    }
+};
+
+export const updateProfileImage = async (imageData: UpdateImageType) => {
+    try {
+        const response = await api.post('/user/updateProfileImage', imageData);
         return response.data;
     } catch (error) {
         console.error('Error in the user auth:', error);
