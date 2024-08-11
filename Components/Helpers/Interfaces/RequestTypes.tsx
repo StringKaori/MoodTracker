@@ -1,4 +1,7 @@
-import DefaultMoodType, { NavigationMoodType } from "./DefaultMoodType"
+// interfaces para definir os types necessários para os objetos
+// utilizados nas requests do back-end
+
+import DefaultMoodType from "./DefaultMoodType"
 
 export interface LoginBodyType {
     email: string,

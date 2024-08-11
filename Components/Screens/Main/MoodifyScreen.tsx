@@ -1,3 +1,4 @@
+// Tela de adição de humor no aplicativo
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text, ImageBackground, TouchableOpacity, ScrollView, TextInput} from 'react-native';
 import MoodIconBuilder from '../../Helpers/MoodIconBuilder';
@@ -14,10 +15,10 @@ type Props = {
 };
 
 export default function MoodifyScreen({ navigation }: Props) {
-    const noteCharacterLimit: number = 360
-    const noteImportanceMessage: string = "We highly recommend writing a note to help you remember why you've felted like this, if you really don't want to, just press the continue button again." 
+    const noteCharacterLimit: number = 360;
+    const noteImportanceMessage: string = "We highly recommend writing a note to help you remember why you've felted like this, if you really don't want to, just press the continue button again.";
 
-    const moodTypes = Object.values(MoodTypesString)
+    const moodTypes = Object.values(MoodTypesString);
     const [noteInput, setNoteInput] = useState('');
     const [shouldShowCharacterLimitError, setShouldShowCharacterLimitError] = useState(false);
     const [selectedMoodID, setSelectedMoodID] = useState<number>();
@@ -27,40 +28,44 @@ export default function MoodifyScreen({ navigation }: Props) {
     const [shouldShowNoteImportanceModal, setShouldShowNoteImportanceModal] = useState(false);
     const [showedNoteImportanceModalAtLeastOnce, setShowedNoteImportanceModalAtLeastOnce] = useState(false);
 
-    const [shouldShowModal, setShouldShowModal] = useState<boolean>(false)
-    const [isSuccess, setIsSuccess] = useState<boolean>(false)
-    const [modalMessage, setModalMessage] = useState<string>("")
+    const [shouldShowModal, setShouldShowModal] = useState<boolean>(false);
+    const [isSuccess, setIsSuccess] = useState<boolean>(false);
+    const [modalMessage, setModalMessage] = useState<string>("");
 
+    // Função para fechar o modal
     const handleModalClose = () => {
         setShouldShowModal(false);
-        if(isSuccess) { navigation.goBack() }
+        if(isSuccess) { navigation.goBack(); }
     }
 
+    // Função para atualizar o texto da nota
     const handleNoteInputChange = (text: string) => {
-        const isTextInvalid = text.length > noteCharacterLimit
-        setShouldShowCharacterLimitError(isTextInvalid)
-        if(isTextInvalid) { return }
+        const isTextInvalid = text.length > noteCharacterLimit;
+        setShouldShowCharacterLimitError(isTextInvalid);
+        if(isTextInvalid) { return; }
 
-        setNoteInput(text)
+        setNoteInput(text);
     }
 
+    // Função para selecionar um humor
     const handleSelectedMood = (mood: MoodTypesString) => {
-        setShouldShowNoMoodSelectedError(false)
-        setSelectedMoodID(MoodTypes[mood as keyof typeof MoodTypes])
-        setSelectedMood(mood)
+        setShouldShowNoMoodSelectedError(false);
+        setSelectedMoodID(MoodTypes[mood as keyof typeof MoodTypes]);
+        setSelectedMood(mood);
     }
 
+    // Função para continuar com a ação
     const handleContinueAction = () => {
 
         if(!selectedMood) { 
-            setShouldShowNoMoodSelectedError(true) 
-            return
+            setShouldShowNoMoodSelectedError(true); 
+            return;
         }
 
         if(!noteInput && !showedNoteImportanceModalAtLeastOnce) {
-            setShouldShowNoteImportanceModal(true)
-            setShowedNoteImportanceModalAtLeastOnce(true)
-            return
+            setShouldShowNoteImportanceModal(true);
+            setShowedNoteImportanceModalAtLeastOnce(true);
+            return;
         }
 
         const body: NewMoodType = {
@@ -68,18 +73,18 @@ export default function MoodifyScreen({ navigation }: Props) {
             note: noteInput
         }
 
-        // request
+        // Requisição para adicionar um novo humor
         newMoodEntry(body)
          .then((data) => {
             setShouldShowModal(true);
-            setIsSuccess(true)
-            setModalMessage('Mood entry created successfuly!')
+            setIsSuccess(true);
+            setModalMessage('Mood entry created successfully!');
          })
 
          .catch((error) => {
             setShouldShowModal(true);
-            setModalMessage(error.response.data.message)
-            console.error(error.message)
+            setModalMessage(error.response.data.message);
+            console.error(error.message);
             // throw error;
          });
     }
@@ -91,27 +96,27 @@ export default function MoodifyScreen({ navigation }: Props) {
          style={styles.background}>
             <StatusBar style="auto" />
 
-            <View style={ styles.container }>
-               <Text style={ styles.title }>How are you feeling today?</Text>
+            <View style={styles.container}>
+               <Text style={styles.title}>How are you feeling today?</Text>
                 
-               { shouldShowNoMoodSelectedError && <NoMoodSelectedError/> }
+               { shouldShowNoMoodSelectedError && <NoMoodSelectedError /> }
                 <ScrollView 
-                 style = { styles.moodIconsView }
+                 style={styles.moodIconsView}
                  contentContainerStyle={styles.scrollViewContent}
                  showsVerticalScrollIndicator={true}>
                     <View style={styles.wrapper}>
                         {
                             moodTypes.map(mood => (
                                 <TouchableOpacity 
-                                 key={ mood }
-                                 onPress={ () => handleSelectedMood(mood) }>
+                                 key={mood}
+                                 onPress={() => handleSelectedMood(mood)}>
                                     <MoodIconBuilder
-                                     moodName = { mood } 
-                                     buttonSize = { 70 }/>
-                                    <Text style = { 
+                                     moodName={mood} 
+                                     buttonSize={70}/>
+                                    <Text style={ 
                                         [styles.moodsLabel,
                                         {backgroundColor: MoodTypesColor[mood as keyof typeof MoodTypesColor]}]}>
-                                            { mood }
+                                            {mood}
                                     </Text>
                                 </TouchableOpacity>
                             ))
@@ -125,12 +130,12 @@ export default function MoodifyScreen({ navigation }: Props) {
                         <Text>Selected Mood:</Text>
                         <View style={styles.selectedMoodCard}>
                             <MoodIconBuilder
-                                moodName = { selectedMood } 
-                                buttonSize = { 70 }/>
-                            <Text style = { 
+                                moodName={selectedMood} 
+                                buttonSize={70}/>
+                            <Text style={ 
                                 [styles.moodsLabel,
                                 {backgroundColor: MoodTypesColor[selectedMood as keyof typeof MoodTypesColor]}]}>
-                                    { selectedMood }
+                                    {selectedMood}
                             </Text>
                         </View>
                     </View>
@@ -143,6 +148,7 @@ export default function MoodifyScreen({ navigation }: Props) {
                  onChangeText={handleNoteInputChange}
                  value={noteInput}
                  placeholder="Type something..." />
+                 
                  { shouldShowCharacterLimitError && <CharacterLimitReached limit={noteCharacterLimit}/> }
 
                  <TouchableOpacity 
@@ -150,16 +156,17 @@ export default function MoodifyScreen({ navigation }: Props) {
                   onPress={handleContinueAction}>
                     <Text style={styles.continueText}>Continue</Text>
                  </TouchableOpacity>
+
                  <WarningModal 
-                  visible = {shouldShowNoteImportanceModal} 
+                  visible={shouldShowNoteImportanceModal} 
                   onClose={() => setShouldShowNoteImportanceModal(false)}
-                  message={ noteImportanceMessage } />
+                  message={noteImportanceMessage} />
             </View>
 
             <WarningModal
-             visible = {shouldShowModal} 
+             visible={shouldShowModal} 
              onClose={handleModalClose}
-             message={ modalMessage } />
+             message={modalMessage} />
 
         </ImageBackground>
     );
@@ -172,7 +179,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        alignItems: `center`,
+        alignItems: 'center',
         borderRadius: 20,
         padding: 35,
     },
@@ -181,12 +188,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 5
     },
-    moodIconsView : {
-        backgroundColor: `white`,
-        borderColor: `black`,
+    moodIconsView: {
+        backgroundColor: 'white',
+        borderColor: 'black',
         borderWidth: 1,
         borderRadius: 10,
-        width: `100%`,
+        width: '100%',
         maxHeight: '40%',
         marginBottom: 20 
     },
@@ -195,31 +202,31 @@ const styles = StyleSheet.create({
         padding: 5
     },
     wrapper: {
-        flexDirection: `row`,
-        flexWrap: `wrap`,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
         justifyContent: 'space-evenly',
-        height: `50%`
+        height: '50%'
     },
     moodsLabel: {
-        textAlign: `center`,
+        textAlign: 'center',
         borderRadius: 50,
         borderColor: 'black',
         borderWidth: 2,
-        fontWeight: `500`
+        fontWeight: '500'
     },
     textArea: {
         height: 150,
         width: '100%',
         borderColor: 'gray',
-        backgroundColor: `white`,
+        backgroundColor: 'white',
         borderWidth: 1,
         padding: 10,
         textAlignVertical: 'top'
     },
     selectedMoodContainer: {
-        flexDirection: `row`,
-        alignSelf: `flex-start`,
-        alignItems: `center`,
+        flexDirection: 'row',
+        alignSelf: 'flex-start',
+        alignItems: 'center',
         marginBottom: 20 
     },
     selectedMoodCard: {
@@ -240,6 +247,6 @@ const styles = StyleSheet.create({
     continueText: {
         flex: 1,
         fontSize: 26,
-        textAlign: `center`
+        textAlign: 'center'
     }
 });

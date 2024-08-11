@@ -1,3 +1,6 @@
+// interfaces para definir os types necessários para os objetos
+// utilizados na navegação do dentro do navigator principal
+
 import { StackNavigationProp } from "@react-navigation/stack";
 import { NavigationMoodType } from "./DefaultMoodType";
 

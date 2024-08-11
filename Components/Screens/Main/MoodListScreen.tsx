@@ -1,3 +1,4 @@
+// Tela de listagem de humores passados
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ImageBackground, Text, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import MoodCardBuilder from '../../Helpers/MoodCardBuilder';
@@ -20,22 +21,24 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
   const [allMoods, setAllMoods] = useState<DefaultMoodType[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
+  // Função para buscar todos os humores
   const fetchAllMoods = async () => {
     try {
       const result = await getAllMoods();
       setAllMoods(result);
     } catch (error) {
       console.error('Error fetching all moods:', error);
-      // Show error modal
     }
   };
 
+  // Atualiza a lista de humores quando a tela ganha foco
   useFocusEffect(
     useCallback(() => {
-      fetchAllMoods(); // Fetch data when the screen gains focus
+      fetchAllMoods();
     }, [])
   );
 
+  // Função para tratar o clique em um card de humor
   const handleCardPress = (mood: DefaultMoodType) => {
     let navigationData: NavigationMoodType = {
       mood_id: mood.mood_id,
@@ -46,22 +49,23 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
     navigation.navigate('RecentMoodDetailView', { moodData: navigationData });
   };
 
+  // Função para atualizar a lista de humores ao puxar para baixo
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchAllMoods();
     setRefreshing(false);
   };
 
+  // Função para deletar um humor
   const handleDeleteMood = async (mood: DefaultMoodType) => {
     const body: DeleteMoodEntry = {
       mood_id: mood.mood_id!
     }
     try {
       await deleteMoodEntry(body);
-      await fetchAllMoods(); // Refresh the mood list after deletion
+      await fetchAllMoods(); // Atualiza a lista após exclusão
     } catch (error) {
       console.error('Error deleting mood entry:', error);
-      // Show error modal
     }
   }
 
@@ -102,7 +106,9 @@ export default function MoodListScreen({ navigation }: NavigationProps) {
                      key={generateRandomString({ length: 16 })} />
                   </View>
                 ))
-              ) : (<Text style={{color: `red`}}>You haven't made an entry yet :/ </Text>)
+              ) : (
+                <Text style={{color: `red`}}>You haven't made an entry yet :/ </Text>
+              )
             }
           </View>
         </ScrollView>
@@ -128,13 +134,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    width: `100%`,
-    backgroundColor: `#EEEEEE`
+    width: '100%',
+    backgroundColor: '#EEEEEE'
   },
   moodsContainer: {
     marginTop: 8,
-    justifyContent: `space-evenly`,
-    flexDirection: `row`,
-    flexWrap: `wrap`
+    justifyContent: 'space-evenly',
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   },
 });

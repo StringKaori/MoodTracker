@@ -1,21 +1,14 @@
-import React, {useState} from 'react';
-import { StyleSheet, Image, Text, TouchableOpacity, View} from 'react-native';
+// Componente de botão para registrar o humor com um emoji e um texto
+import React from 'react';
+import { StyleSheet, Image, Text, TouchableOpacity, View } from 'react-native';
 
-import MoodifyModal from './MoodifyModal';
-
-const registerMoodButtonTitle: string = "Have you recorded your mood today? Moodify now!"
+const registerMoodButtonTitle: string = "Have you recorded your mood today? Moodify now!";
 
 interface MoodifyButtonProps {
-    handlePress: () => void
+    handlePress: () => void;
 }
 
 export default function MoodifyButton(props: MoodifyButtonProps) {
-
-    // const [shouldShowModal, setShouldShowModal] = useState(false);
-
-    // const toggleModal = () => {
-    //   setShouldShowModal(!shouldShowModal)
-    // }
 
     return (
         <View>
@@ -23,17 +16,13 @@ export default function MoodifyButton(props: MoodifyButtonProps) {
                 style={styles.button}
                 onPress={props.handlePress}>
                 <Image 
-                    source = {require("../../assets/Images/Emojis/MoodifyButtonEmoji.png")}
-                    style = {styles.image}/>
+                    source={require("../../assets/Images/Emojis/MoodifyButtonEmoji.png")}
+                    style={styles.image}/>
                 <Text
-                    style = {styles.text}>
+                    style={styles.text}>
                     {registerMoodButtonTitle}
                 </Text>
             </TouchableOpacity>
-
-            {/* { shouldShowModal &&
-              <MoodifyModal shouldShowModal={shouldShowModal}
-                            toggleModal={toggleModal}/> } */}
 
         </View>
     );
@@ -54,7 +43,7 @@ const styles = StyleSheet.create({
         borderRightWidth: 7
     },
     image: {
-        alignSelf:'flex-start',
+        alignSelf: 'flex-start',
         height: 66,
         width: 66,
         marginVertical: 5,

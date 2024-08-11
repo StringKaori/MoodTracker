@@ -1,3 +1,4 @@
+// Tela de Dashboard mostrando gráficos de humor semanal e mensal
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ImageBackground, Dimensions, TouchableOpacity, Text, ViewStyle } from 'react-native';
 import { MoodTypes, MoodTypesColor, MoodTypesString } from '../../Helpers/Enums/MoodTypes';
@@ -15,8 +16,10 @@ const screenWidth = Dimensions.get('window').width;
 
 export default function Dashboard() {
 
+  // Calcula a largura das barras do gráfico
   const barWidth = (screenWidth * 0.5) / 3.2;
 
+  // Estilos para botões ativos e inativos
   const activeButton: ViewStyle = {
     borderWidth: 2,
     borderBottomWidth: 0,
@@ -29,16 +32,16 @@ export default function Dashboard() {
     backgroundColor: `#C2C9C6`,
   };
 
+  // Estados para controlar a exibição dos gráficos e o carregamento
   const [weeklyBorderWidth, setWeeklyBorderWidth] = useState<ViewStyle>(activeButton);
   const [monthlyBorderWidth, setMonthlyBorderWidth] = useState<ViewStyle>(inactiveButton);
-
   const [shouldShowWeeklyChart, setShouldShowWeeklyChart] = useState<boolean>(true);
   const [shouldShowMonthlyChart, setShouldShowMonthlyChart] = useState<boolean>(false);
-
   const [weeklyMoods, setWeeklyMoods] = useState<PastMoodType[]>();
   const [monthlyMoods, setMonthlyMoods] = useState<PastSixMonthsMoodType[]>();
   const [isLoading, setIsLoading] = useState(false);
 
+  // Função para buscar os humores da última semana
   const fetchPastWeekMoods = async () => {
     setIsLoading(true);
     try {
@@ -46,12 +49,12 @@ export default function Dashboard() {
       setWeeklyMoods(result);
     } catch (error) {
       console.error('Error fetching past week moods:', error);
-      // Show error modal
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Função para buscar os humores dos últimos seis meses
   const fetchPastMonthMoods = async () => {
     setIsLoading(true);
     try {
@@ -59,12 +62,12 @@ export default function Dashboard() {
       setMonthlyMoods(result);
     } catch (error) {
       console.error('Error fetching past six months moods:', error);
-      // Show error modal
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Atualiza os dados quando a tela ganha foco
   useFocusEffect(
     useCallback(() => {
       fetchPastWeekMoods();
@@ -72,6 +75,7 @@ export default function Dashboard() {
     }, [])
   );
 
+  // Manipula o clique nos botões para alternar entre os gráficos
   const handlePress = (didPressWeekly: boolean) => {
     const weeklyState = didPressWeekly ? activeButton : inactiveButton;
     const monthlyState = !didPressWeekly ? activeButton : inactiveButton;
@@ -86,11 +90,13 @@ export default function Dashboard() {
     setShouldShowMonthlyChart(!didPressWeekly);
   };
 
+  // Dados dos gráficos
   var barData: barDataItem[] = [];
   var stackBarData: stackDataItem[] = [];
   var differentMoods: MoodTypes[] = [];
   const moodCounts: { [key: string]: number } = {};
 
+  // Preenche os dados para o gráfico semanal
   if(weeklyMoods) {
     weeklyMoods.forEach(mood => {
       barData.push({ 
@@ -101,6 +107,7 @@ export default function Dashboard() {
     });
   }
 
+  // Preenche os dados para o gráfico mensal
   if(monthlyMoods) {
     monthlyMoods.forEach(mood => {
       const stacks = mood.stack.map(stack => {
@@ -139,14 +146,14 @@ export default function Dashboard() {
 
         <View style={styles.chartTypeSelectionContainer}>
           <TouchableOpacity 
-           style={weeklyBorderWidth}
-           onPress={() => handlePress(true)}>
+            style={weeklyBorderWidth}
+            onPress={() => handlePress(true)}>
             <Text style={styles.buttonText}>Weekly</Text>
           </TouchableOpacity>
 
           <TouchableOpacity 
-           style={monthlyBorderWidth}
-           onPress={() => handlePress(false)}>
+            style={monthlyBorderWidth}
+            onPress={() => handlePress(false)}>
             <Text style={styles.buttonText}>Monthly</Text>
           </TouchableOpacity>
         </View>
@@ -204,6 +211,7 @@ export default function Dashboard() {
   );
 }
 
+// Estilos para os componentes da tela
 const styles = StyleSheet.create({
   container: {
     flex: 1,

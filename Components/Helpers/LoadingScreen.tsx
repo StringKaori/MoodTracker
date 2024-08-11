@@ -1,6 +1,8 @@
+// tela de loading padrão
 import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 
+// Componente de tela de carregamento que exibe um indicador de progresso e uma mensagem
 export default function LoadingScreen() {
     return (
         <View style={styles.container}>
@@ -10,16 +12,17 @@ export default function LoadingScreen() {
     );
 }
 
+// Estilos para a tela de carregamento
 const styles = StyleSheet.create({
     container: {
-        ...StyleSheet.absoluteFillObject, // This makes the view cover the entire screen
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
-        justifyContent: 'center', // Center content vertically
-        alignItems: 'center', // Center content horizontally
-        zIndex: 1000, // Ensure it's on top of other views (if needed)
+        ...StyleSheet.absoluteFillObject, // Faz com que a visualização cubra toda a tela
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fundo semi-transparente
+        justifyContent: 'center', // Centraliza o conteúdo verticalmente
+        alignItems: 'center', // Centraliza o conteúdo horizontalmente
+        zIndex: 1000, // Garante que esteja acima de outras visualizações (se necessário)
     },
     text: {
-        color: '#fff', // Text color for contrast against the background
-        marginTop: 10, // Space between the activity indicator and the text
+        color: '#fff', // Cor do texto para contraste com o fundo
+        marginTop: 10, // Espaço entre o indicador de carregamento e o texto
     },
 });

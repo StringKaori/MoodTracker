@@ -1,3 +1,8 @@
+// constante com os requires de todos os emojis, teve de ser feito dessa forma
+// pois o require, que é utilizado para carregar imagens localmente
+// não aceita variáveis, então para deixar dinâmico, esse foi modo
+// que achei
+
 export const MoodImages = {
     Enraged: require('../../../assets/Images/Emojis/Enraged.png'),
     Angry: require('../../../assets/Images/Emojis/Angry.png'),

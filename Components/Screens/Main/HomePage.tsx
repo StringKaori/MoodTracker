@@ -1,3 +1,5 @@
+// Tela principal do usuário com informações de perfil e humores recentes
+
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text, ImageBackground, Image, DimensionValue, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import MoodifyButton from '../../Helpers/MoodifyButton';
@@ -22,6 +24,7 @@ type HomeProps = {
   navigation: HomePageNavigationProp;
 };
 
+// Componente da tela principal do usuário
 export default function HomePage({ navigation }: HomeProps) {
   const [dataChanged, setDataChanged] = useState(false); // Estado para rastrear se os dados foram alterados
   const [refreshing, setRefreshing] = useState(false);
@@ -50,6 +53,7 @@ export default function HomePage({ navigation }: HomeProps) {
     setRefreshing(false);
   };
 
+  // Manipula o clique no humor recente
   const handleRecentMoodPress = (data: DefaultMoodType) => {
     let navigationData: NavigationMoodType = {
       mood_id: data.mood_id,
@@ -60,14 +64,17 @@ export default function HomePage({ navigation }: HomeProps) {
     navigation.navigate('RecentMoodDetailView', { moodData: navigationData });
   }
 
+  // Manipula o clique no botão de edição do perfil
   const handleEditButtonPress = () => {
     navigation.navigate('EditAccountDetails');
   }
 
+  // Manipula o clique no botão Moodify
   const handleMoodifyPress = () => {
     navigation.navigate('MoodifyScreen');
   }
 
+  // Abre a galeria para selecionar uma imagem
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -82,6 +89,7 @@ export default function HomePage({ navigation }: HomeProps) {
     } 
   };
 
+  // Converte a imagem selecionada em bytes e a envia para o servidor
   const convertImageToBytes = async (imageUri: string) => {
     try {
       const base64 = await FileSystem.readAsStringAsync(imageUri, { encoding: 'base64' });
@@ -97,6 +105,7 @@ export default function HomePage({ navigation }: HomeProps) {
     }
   };
 
+  // Manipula a alteração da foto de perfil
   const handleProfilePictureChange = async () => {
     await pickImage();
   };

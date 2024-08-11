@@ -1,3 +1,4 @@
+// Tela de registro do usuário com validações e funcionalidades de autenticação
 import React, { useState } from 'react';
 import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -11,43 +12,47 @@ type AuthScreenProps = {
     navigation: AuthScreenNavigationProp;
 };
 
-export default function RegisterScreen( { navigation }: AuthScreenProps ) {
-  // inputs
+export default function RegisterScreen({ navigation }: AuthScreenProps) {
+  // Estado para armazenar os valores dos campos de entrada
   const [emailInput, setEmailInput] = useState<string>('');
   const [usernameInput, setUsernameInput] = useState<string>('');
   const [passwordInput, setPasswordInput] = useState<string>('');
   const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>('');
 
-  // password visibility
-  const [seePasswordIcon, setSeePasswordIcon] = useState<string>('eye-slash')
-  const [seeConfirmPasswordIcon, setSeeConfirmPasswordIcon] = useState<string>('eye-slash')
-  const [shouldHidePassword, setShouldHidePassword] = useState<boolean>(true)
-  const [shouldHideConfirmPassword, setShouldHideConfirmPassword] = useState<boolean>(true)
+  // Estado para controlar a visibilidade das senhas
+  const [seePasswordIcon, setSeePasswordIcon] = useState<string>('eye-slash');
+  const [seeConfirmPasswordIcon, setSeeConfirmPasswordIcon] = useState<string>('eye-slash');
+  const [shouldHidePassword, setShouldHidePassword] = useState<boolean>(true);
+  const [shouldHideConfirmPassword, setShouldHideConfirmPassword] = useState<boolean>(true);
 
-  // registration verifiers
-  const [isUsernameInputEmpty, setIsUsernameInputEmpty] = useState<boolean>(false)
-  const [isEmailInputEmpty, setIsEmailInputEmpty] = useState<boolean>(false)
-  const [isPasswordInputEmpty, setIsPasswordInputEmpty] = useState<boolean>(false)
-  const [isConfirmPasswordInputEmpty, setIsConfirmPasswordInputEmpty] = useState<boolean>(false)
+  // Estado para verificar a validade dos campos e senhas
+  const [isUsernameInputEmpty, setIsUsernameInputEmpty] = useState<boolean>(false);
+  const [isEmailInputEmpty, setIsEmailInputEmpty] = useState<boolean>(false);
+  const [isPasswordInputEmpty, setIsPasswordInputEmpty] = useState<boolean>(false);
+  const [isConfirmPasswordInputEmpty, setIsConfirmPasswordInputEmpty] = useState<boolean>(false);
   const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
-  const [passwordAreTheSame, setPasswordAreTheSame] = useState<boolean>(true)
-  const [shouldShowModal, setShouldShowModal] = useState<boolean>(false)
-  const [isSuccess, setIsSuccess] = useState<boolean>(false)
-  const [modalMessage, setModalMessage] = useState<string>("")
+  const [passwordAreTheSame, setPasswordAreTheSame] = useState<boolean>(true);
+  const [shouldShowModal, setShouldShowModal] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
 
-  // Helper functions
-  const handlePasswordVisibilityPress = (icon: String,
-                                         shouldHide: boolean,
-                                         setIcon: React.Dispatch<React.SetStateAction<string>>,
-                                         setShouldHide: React.Dispatch<React.SetStateAction<boolean>>) => {
-    let newState = icon == "eye-slash" ? "eye" : "eye-slash"
-    setIcon(newState)
-    setShouldHide(!shouldHide)
+  // Função para alternar a visibilidade da senha
+  const handlePasswordVisibilityPress = (
+    icon: string,
+    shouldHide: boolean,
+    setIcon: React.Dispatch<React.SetStateAction<string>>,
+    setShouldHide: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    let newState = icon === "eye-slash" ? "eye" : "eye-slash";
+    setIcon(newState);
+    setShouldHide(!shouldHide);
   }
 
-const handleRegisterAction = () => {
+  // Função para lidar com a ação de registro
+  const handleRegisterAction = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+    // Verifica se os campos estão vazios
     const isUsernameInputEmpty = usernameInput === "";
     const isEmailInputEmpty = emailInput === "";
     const isPasswordInputEmpty = passwordInput === "";
@@ -65,8 +70,8 @@ const handleRegisterAction = () => {
 
     if (!canProceed) { return; }
 
-    const emailIsValid = emailRegex.test(emailInput)
-    setIsEmailValid(emailIsValid)
+    const emailIsValid = emailRegex.test(emailInput);
+    setIsEmailValid(emailIsValid);
 
     const passwordAreTheSame = passwordInput === confirmPasswordInput;
     setPasswordAreTheSame(passwordAreTheSame);
@@ -82,22 +87,21 @@ const handleRegisterAction = () => {
     registerUser(body)
     .then((data) => {
       setShouldShowModal(true);
-      setIsSuccess(true)
-      setModalMessage('User registered successfully!')
+      setIsSuccess(true);
+      setModalMessage('User registered successfully!');
     })
-
     .catch((error) => {
       setShouldShowModal(true);
-      setModalMessage(error.response.data.message)
+      setModalMessage(error.response.data.message);
       throw error;
     });
+  }
 
-}
-
-const handleModalClose = () => {
-  setShouldShowModal(false);
-  if(isSuccess) { navigation.goBack() }
-}
+  // Função para lidar com o fechamento do modal
+  const handleModalClose = () => {
+    setShouldShowModal(false);
+    if (isSuccess) { navigation.goBack(); }
+  }
 
   return (
     <ImageBackground 
@@ -109,7 +113,7 @@ const handleModalClose = () => {
 
         <View>
           <Text style={styles.label}>Username</Text>
-            <View style={styles.inputContainer}>
+          <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
               placeholder="Type your username here"
@@ -117,7 +121,7 @@ const handleModalClose = () => {
               onChangeText={setUsernameInput}
             />
           </View>
-          { isUsernameInputEmpty && <EmptyFieldError/> }
+          {isUsernameInputEmpty && <EmptyFieldError />}
           
           <Text style={styles.label}>E-mail</Text>
           <View style={styles.inputContainer}>
@@ -128,8 +132,8 @@ const handleModalClose = () => {
               onChangeText={setEmailInput}
             />
           </View>
-          { isEmailInputEmpty && <EmptyFieldError/> }
-          { !isEmailValid && <InvalidEmailError/> }
+          {isEmailInputEmpty && <EmptyFieldError />}
+          {!isEmailValid && <InvalidEmailError />}
           
           <Text style={styles.label}>Password</Text>
           <View style={styles.inputContainer}>
@@ -141,19 +145,16 @@ const handleModalClose = () => {
               secureTextEntry={shouldHidePassword}
             />
             <TouchableOpacity
-             onPress={() =>
-                handlePasswordVisibilityPress(seePasswordIcon,
-                                              shouldHidePassword,
-                                              setSeePasswordIcon,
-                                              setShouldHidePassword)}
-             style = {styles.passwordEye}>
+              onPress={() =>
+                handlePasswordVisibilityPress(seePasswordIcon, shouldHidePassword, setSeePasswordIcon, setShouldHidePassword)}
+              style={styles.passwordEye}>
               <FontAwesome 
-                name = {seePasswordIcon}
-                size = {20} /> 
+                name={seePasswordIcon}
+                size={20} /> 
             </TouchableOpacity>
           </View>
-          { isPasswordInputEmpty && <EmptyFieldError/> }
-          { !passwordAreTheSame && <DifferentPasswordsError/> }
+          {isPasswordInputEmpty && <EmptyFieldError />}
+          {!passwordAreTheSame && <DifferentPasswordsError />}
 
           <Text style={styles.label}>Password confirmation</Text>
           <View style={styles.inputContainer}>
@@ -165,34 +166,31 @@ const handleModalClose = () => {
               secureTextEntry={shouldHideConfirmPassword}
             />
             <TouchableOpacity
-             onPress={() =>
-                handlePasswordVisibilityPress(seeConfirmPasswordIcon,
-                                              shouldHideConfirmPassword,
-                                              setSeeConfirmPasswordIcon,
-                                              setShouldHideConfirmPassword)}
-             style = {styles.passwordEye}>
+              onPress={() =>
+                handlePasswordVisibilityPress(seeConfirmPasswordIcon, shouldHideConfirmPassword, setSeeConfirmPasswordIcon, setShouldHideConfirmPassword)}
+              style={styles.passwordEye}>
               <FontAwesome 
-                name = {seeConfirmPasswordIcon}
-                size = {20}/> 
+                name={seeConfirmPasswordIcon}
+                size={20} /> 
             </TouchableOpacity>
           </View>
-          { isConfirmPasswordInputEmpty && <EmptyFieldError/> }
-          { !passwordAreTheSame && <DifferentPasswordsError/> }
+          {isConfirmPasswordInputEmpty && <EmptyFieldError />}
+          {!passwordAreTheSame && <DifferentPasswordsError />}
 
         </View>
 
         <TouchableOpacity 
-         style={styles.registerButton}
-         onPress={handleRegisterAction}>
+          style={styles.registerButton}
+          onPress={handleRegisterAction}>
           <Text style={styles.registerButtonText}>Register</Text>
         </TouchableOpacity>
 
       </View>
 
       <WarningModal
-       visible = {shouldShowModal} 
-       onClose={handleModalClose}
-       message={ modalMessage } />
+        visible={shouldShowModal} 
+        onClose={handleModalClose}
+        message={modalMessage} />
 
     </ImageBackground>
   );
@@ -212,19 +210,19 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 4,
-    marginTop: 4
+    marginTop: 4,
   },
   input: {
     height: 40,
-    width: `98%`,
-    backgroundColor: `white`,
+    width: '98%',
+    backgroundColor: 'white',
     borderColor: 'black',
     borderWidth: 3,
     borderRadius: 6,
     paddingHorizontal: 8,
   },
   inputContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   passwordEye: {
     position: 'absolute',
@@ -233,17 +231,17 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -12 }],
   },
   registerButton: {
-    backgroundColor: `#A3EAFB`,
+    backgroundColor: '#A3EAFB',
     height: 40,
     width: 200,
-    justifyContent: `center`,
+    justifyContent: 'center',
     borderColor: 'black',
     borderWidth: 3,
     borderRadius: 20,
-    marginTop: 12
+    marginTop: 12,
   },
   registerButtonText: {
     fontSize: 20,
-    textAlign: `center`,
-  }
+    textAlign: 'center',
+  },
 });

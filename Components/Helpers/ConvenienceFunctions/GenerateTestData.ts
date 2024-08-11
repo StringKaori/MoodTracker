@@ -1,3 +1,6 @@
+// função de conveniencia para criar várias entradas de mood
+// para testes
+
 import { NewMoodType } from "../Interfaces/RequestTypes";
 import { newMoodEntry } from "../RequestBase";
 

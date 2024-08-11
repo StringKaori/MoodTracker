@@ -1,3 +1,4 @@
+// Tela de login do usuário com funcionalidades de autenticação
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, TextInput } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -12,43 +13,47 @@ type AuthScreenProps = {
 };
 
 export default function LoginScreen({ navigation }: AuthScreenProps) {
+  // Estado para armazenar os valores dos campos de email e senha
   const [emailInput, setEmailInput] = useState<string>('');
   const [passwordInput, setPasswordInput] = useState<string>('');
-  const [seePasswordIcon, setSeePasswordIcon] = useState<string>('eye-slash')
-  const [shouldHidePassword, setShouldHidePassword] = useState<boolean>(true)
-  const [shouldShowModal, setShouldShowModal] = useState<boolean>(false)
-  const [modalMessage, setModalMessage] = useState<string>("")
+  
+  // Estado para controlar a visibilidade da senha
+  const [seePasswordIcon, setSeePasswordIcon] = useState<string>('eye-slash');
+  const [shouldHidePassword, setShouldHidePassword] = useState<boolean>(true);
+  
+  // Estado para mostrar e ocultar o modal de aviso
+  const [shouldShowModal, setShouldShowModal] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
 
-  // Helper functions
+  // Função para alternar a visibilidade da senha
   const handlePasswordVisibilityPress = () => {
-    let newState = seePasswordIcon == "eye-slash" ? "eye" : "eye-slash"
-    setSeePasswordIcon(newState)
-    setShouldHidePassword(!shouldHidePassword)
+    let newState = seePasswordIcon === "eye-slash" ? "eye" : "eye-slash";
+    setSeePasswordIcon(newState);
+    setShouldHidePassword(!shouldHidePassword);
   }
 
+  // Função para buscar os dados da página inicial após login
   const fetchHomeData = async () => {
     try {
       const result: UserDataType = await getHomeData();
-      console.log('====================================');
-      console.log(result);
-      console.log('====================================');
       global.userData = result; 
     } catch (error) {
       console.error('Error fetching home data:', error);
     }
   };
 
+  // Função para lidar com a ação de login
   const handleLoginAction = () => {
     const body: LoginBodyType = {
       email: emailInput,
       password: passwordInput,
-    }
+    };
 
     userLogin(body)
     .then((data) => {
-      global.token = data.signToken
-      updateToken()
-      fetchHomeData()
+      global.token = data.signToken;
+      updateToken();
+      fetchHomeData();
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
@@ -56,17 +61,16 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
         })
       );
     })
-
     .catch((error) => {
       setShouldShowModal(true);
-      setModalMessage(error.response.data.message)
+      setModalMessage(error.response.data.message);
       // throw error;
     });
-    
   }
 
+  // Função para navegar para a tela de registro
   const handleRegisterAction = () => {
-    navigation.navigate('Register')
+    navigation.navigate('Register');
   }
 
   return (
@@ -101,11 +105,11 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
               secureTextEntry={shouldHidePassword}
             />
             <TouchableOpacity
-             onPress={handlePasswordVisibilityPress}
-             style = {styles.passwordEye}>
+              onPress={handlePasswordVisibilityPress}
+              style={styles.passwordEye}>
               <FontAwesome 
-                name = {seePasswordIcon}
-                size = {20} /> 
+                name={seePasswordIcon}
+                size={20} /> 
             </TouchableOpacity>
           </View>
         </View>
@@ -119,17 +123,17 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
         </View>
 
         <TouchableOpacity 
-         style={styles.loginButton}
-         onPress={handleLoginAction}>
+          style={styles.loginButton}
+          onPress={handleLoginAction}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
 
       </View>
 
       <WarningModal
-       visible = {shouldShowModal} 
-       onClose={() => setShouldShowModal(false)}
-       message={ modalMessage } />
+        visible={shouldShowModal} 
+        onClose={() => setShouldShowModal(false)}
+        message={modalMessage} />
 
     </ImageBackground>
   );
@@ -138,7 +142,7 @@ export default function LoginScreen({ navigation }: AuthScreenProps) {
 const styles = StyleSheet.create({
   title: {
     fontSize: 30,
-    fontWeight: `600`,
+    fontWeight: '600',
     marginBottom: 50
   },
   background: {
@@ -157,8 +161,8 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: `98%`,
-    backgroundColor: `white`,
+    width: '98%',
+    backgroundColor: 'white',
     borderColor: 'black',
     borderWidth: 3,
     borderRadius: 6,
@@ -177,17 +181,17 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   loginButton: {
-    backgroundColor: `#A3EAFB`,
+    backgroundColor: '#A3EAFB',
     height: 40,
     width: 200,
-    justifyContent: `center`,
+    justifyContent: 'center',
     borderColor: 'black',
     borderWidth: 3,
     borderRadius: 20
   },
   loginButtonText: {
     fontSize: 20,
-    textAlign: `center`,
+    textAlign: 'center',
   },
   inputContainer: {
     flexDirection: 'row',

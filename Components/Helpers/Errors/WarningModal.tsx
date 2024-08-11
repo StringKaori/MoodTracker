@@ -1,5 +1,12 @@
+// componente default para exibir modais
+// recebe 
+//  visible?: boolean,   -> responsável por controlar a visibilidade da modal
+//  onClose: () => void, -> função que controla o que acontece quando 
+//                          o botão de fechar é clicado
+//  message: string      -> mensagem a ser exibida
+
 import React from 'react';
-import { View, Text, Button, StyleSheet, Modal, ModalProps } from 'react-native';
+import { View, Text, Button, StyleSheet, Modal } from 'react-native';
 
 interface WarningModalProps {
     visible?: boolean,

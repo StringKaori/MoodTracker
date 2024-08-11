@@ -1,3 +1,6 @@
+// componente facilitador para criar labels 
+// de erro e exporta-lás
+
 import { StyleSheet, Text } from 'react-native';
 
 interface SimpleLabelPropType {

@@ -1,3 +1,6 @@
+// função utilizada para criar e formatar a string de data
+// utilizada nos cards de mood
+
 export function convertToDateString(date: string | Date): string {
 
     if (typeof date === 'string') {
@@ -12,7 +15,6 @@ export function convertToDateString(date: string | Date): string {
     const day = date.getDate();
     const year = date.getFullYear();
 
-    // Function to get the ordinal suffix for a day
     function getOrdinalSuffix(day: number): string {
         if (day >= 11 && day <= 13) {
             return 'th';

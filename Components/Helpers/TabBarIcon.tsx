@@ -1,3 +1,4 @@
+// Componente TabBarIcon exibe um ícone de tab bar com opção de expansão
 import { StyleSheet, View, Text } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -11,6 +12,7 @@ interface TabBarIconProps {
 
 export default function TabBarIcon(props: TabBarIconProps) {
 
+    // Define cores de fundo e larguras dinâmicas com base no nome da aba
     const backgroundColors: {[key: string]: string} = {
         "Home": '#dffd19',
         "Dashboard": '#fdd27f',
@@ -23,9 +25,11 @@ export default function TabBarIcon(props: TabBarIconProps) {
         "Mood List": 110
     };
 
-    const containerBackgroundColor: string = backgroundColors[props.name]
-    const containerBackgroundWidth: number = backgroundWidths[props.name]
+    // Obtém as propriedades de cor e largura para o estilo dinâmico
+    const containerBackgroundColor: string = backgroundColors[props.name];
+    const containerBackgroundWidth: number = backgroundWidths[props.name];
 
+    // Cria estilos dinâmicos para quando a aba está expandida
     const dynamicStyle = StyleSheet.create({
         containerExpanded: {
             ...styles.container,
@@ -35,23 +39,21 @@ export default function TabBarIcon(props: TabBarIconProps) {
             borderWidth: 2,
             borderColor: 'black'
         }
-    })
-    
+    });
 
-    return(
-        <View style = { props.shouldExpand ? dynamicStyle.containerExpanded : 
-                                             styles.container }>
+    return (
+        <View style={props.shouldExpand ? dynamicStyle.containerExpanded : styles.container}>
             <FontAwesome 
-             name = { props.iconName } 
-             size = { props.size } 
-             color = { props.color } 
-             style = { styles.icon }/> 
-            { props.shouldExpand && 
-              <Text style = {styles.text}>{props.name}</Text> }
+                name={props.iconName} 
+                size={props.size} 
+                color={props.color} 
+                style={styles.icon} 
+            />
+            {props.shouldExpand && 
+                <Text style={styles.text}>{props.name}</Text>}
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -63,11 +65,11 @@ const styles = StyleSheet.create({
     },
     icon: {
         marginRight: 5,
-        color:'black'
+        color: 'black'
     },
     text: {
         color: 'black',
         fontWeight: 'bold',
-        marginLeft: 1, 
+        marginLeft: 1
     }
 });

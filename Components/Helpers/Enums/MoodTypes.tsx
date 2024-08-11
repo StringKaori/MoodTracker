@@ -1,4 +1,6 @@
+// enum de todos os tipos de mood diferente como números
 export enum MoodTypes {
+
   // red
   Enraged,
   Angry,
@@ -44,7 +46,9 @@ export enum MoodTypes {
   Relaxed
 }
 
+// enum de todos os tipos de mood diferente como strings
 export enum MoodTypesString {
+
   // red
   Enraged  = "Enraged",
   Angry    = "Angry",
@@ -90,7 +94,9 @@ export enum MoodTypesString {
   Relaxed  = "Relaxed"
 }
 
+// enum de todos os tipos de mood diferente como hex de cores
 export enum MoodTypesColor {
+
   // red
   Enraged  = "#F5211E",
   Angry    = "#F95E5A",
