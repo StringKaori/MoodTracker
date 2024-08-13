@@ -1,5 +1,7 @@
 {
-  "name": "moodtracker",
+  "name": "spectrum-mood-tracker-mobile-application",
+  "description": "Mobile application SpectrumMoodTracker.",
+  "author": "Guilherme Leite | Luan Tavares | Octávio Barassa | Yuri Dias",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
